@@ -209,19 +209,18 @@ const Create_Document = () => {
   //table
   const columns = [
     {
-      title: "Time",
-      dataIndex: "DATENTIME",
+      title: "Documents ID",
+      dataIndex: "DOCUMENT_ID",
     },
-
     {
       title: "Documents Type",
       dataIndex: "NAME",
     },
-
     {
-      title: "Documents ID",
-      dataIndex: "DOCUMENT_ID",
+      title: "Time",
+      dataIndex: "DATENTIME",
     },
+
     {
       title: "Documents Details",
 
@@ -229,7 +228,7 @@ const Create_Document = () => {
         <>
           <Link
             className="btn btn-success"
-            to={`/viewDocuments/${record.ID}/${record.DOCUMENT_ID}`}
+            to={`/docs/viewDocuments/${record.ID}/${record.DOCUMENT_ID}`}
           >
             <span class="fa fa-eye"></span>
           </Link>
