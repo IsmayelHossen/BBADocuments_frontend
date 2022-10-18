@@ -294,7 +294,7 @@ const ViewDocuments = () => {
                 {DataLoader && (
                   <div className="table-responsive vendor_table_box">
                     <table class="table table-striped">
-                      <tbody>
+                      <thead>
                         <tr>
                           <th>SN</th>
                           <th>Date</th>
@@ -303,7 +303,7 @@ const ViewDocuments = () => {
                           <th>Download</th>
                           <th>Action</th>
                         </tr>
-                      </tbody>
+                      </thead>
                       <tbody>
                         {fileData.map((row, index) => (
                           <tr>
