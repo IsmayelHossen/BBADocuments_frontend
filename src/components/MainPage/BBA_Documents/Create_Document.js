@@ -77,10 +77,12 @@ const Create_Document = () => {
     setprogressShow(true);
     const date = new Date().toLocaleString();
     console.log(date);
+    const employee_id = 23498;
     const formData = new FormData();
     formData.append("datentime", date);
     formData.append("id", data.id);
     formData.append("name", data.name);
+    formData.append("employee_id", employee_id);
     console.log(data);
     if (data.documents.length > 1) {
       for (let i = 0; i < data.documents.length; i++) {
@@ -209,16 +211,32 @@ const Create_Document = () => {
   //table
   const columns = [
     {
+      title: "Employee  Booked Id",
+      dataIndex: "EMP_ID",
+    },
+    {
       title: "Documents ID",
-      dataIndex: "DOCUMENT_ID",
+      dataIndex: "MEETING_ID",
     },
     {
       title: "Documents Type",
       dataIndex: "NAME",
     },
+
     {
       title: "Time",
-      dataIndex: "DATENTIME",
+      // dataIndex: "DATENTIME",
+      render: (text, record) => (
+        <>
+          {new Date(record.DATENTIME).getDate() +
+            "/" +
+            new Date(record.DATENTIME).getMonth() +
+            "/" +
+            new Date(record.DATENTIME).getFullYear() +
+            "," +
+            record.DATENTIME.split(",")[1]}
+        </>
+      ),
     },
 
     {
@@ -228,7 +246,7 @@ const Create_Document = () => {
         <>
           <Link
             className="btn btn-success"
-            to={`/docs/viewDocuments/${record.ID}/${record.DOCUMENT_ID}`}
+            to={`/docs/viewDocuments/${record.ID}/${record.MEETING_ID}`}
           >
             <span class="fa fa-eye"></span>
           </Link>
@@ -477,7 +495,7 @@ const Create_Document = () => {
                       <Table
                         className="table-striped"
                         pagination={{
-                          total: Alldata.length,
+                          total: Alldata?.length,
                           showTotal: (total, range) =>
                             `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                           showSizeChanger: true,
@@ -487,7 +505,7 @@ const Create_Document = () => {
                         style={{ overflowX: "auto" }}
                         columns={columns}
                         // bordered
-                        dataSource={Alldata}
+                        dataSource={Alldata ? Alldata : ""}
                         rowKey={(record) => record.id}
                         onChange={console.log("chnage")}
                       />

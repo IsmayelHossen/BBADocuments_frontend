@@ -63,7 +63,7 @@ const PdfView = () => {
               <div className="col-md-12">
                 <iframe
                   src={`${BaseUrl}/uploadDoc/${useParam.name}`}
-                  width="100%"
+                  width="90%"
                   height="500%"
                 >
                   {" "}

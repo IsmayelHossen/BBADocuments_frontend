@@ -368,6 +368,15 @@ th {
   text-decoration: none;
   background: #516273;
 }
+.dash-widget {
+  
+    border: 1px solid #ededed;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    /* max-height: 105px; */
+    min-height: 152px;
+
+}
 /* media design */
 @media only screen and (max-width: 600px) {
   .create_vendor_page_title {
