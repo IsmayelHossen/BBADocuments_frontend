@@ -16,6 +16,7 @@ import "../../../index.css";
 
 import "../BBA_Documents/vendor.css";
 import { BaseUrl } from "./CommonUrl";
+import { LineWave } from "react-loader-spinner";
 
 const DocumentList = () => {
   const [DataLoader, setDataLoader] = useState(true);
@@ -54,7 +55,7 @@ const DocumentList = () => {
 
   const getDocument = () => {
     axios.get(`${BaseUrl}/documents/docslist`).then((res) => {
-      console.log(res.data.data);
+      setDataLoader(false);
       setfileData(res.data.data);
     });
   };
@@ -198,7 +199,7 @@ const DocumentList = () => {
                 <span class="fa fa-search form-control-feedback"></span>
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control bba_documents-form-control"
                   value={searchdata}
                   name="searchStatus"
                   placeholder="Search"
@@ -210,20 +211,24 @@ const DocumentList = () => {
           <div class="card-body1">
             <div className="row">
               <div className="col-md-12">
-                {!DataLoader && (
+                {DataLoader && (
                   <>
-                    {/* DataLoader */}
-                    <p className="text-center mt-5">
-                      {" "}
-                      <i
-                        class="fa fa-spinner fa-spin fa-3x fa-fw"
-                        style={{ color: "green", fontSiz: "20px" }}
-                      ></i>
-                      <span class="sr-only">Loading...</span>
-                    </p>
+                    <LineWave
+                      style={{ color: "red" }}
+                      height="200"
+                      width="600"
+                      color="#4fa94d"
+                      ariaLabel="line-wave"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                      visible={true}
+                      firstLineColor="red"
+                      middleLineColor="yellow"
+                      lastLineColor=""
+                    />
                   </>
                 )}
-                {DataLoader && (
+                {!DataLoader && (
                   <div className="table-responsive vendor_table_box">
                     <Table
                       className="table-striped"

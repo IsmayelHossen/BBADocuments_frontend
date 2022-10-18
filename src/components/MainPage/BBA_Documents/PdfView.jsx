@@ -9,20 +9,26 @@ import { Button, Table } from "antd";
 import "../../antdstyle.css";
 import { itemRender, onShowSizeChange } from "../../paginationfunction";
 import { BaseUrl } from "./CommonUrl";
+import { LineWave } from "react-loader-spinner";
 
 const PdfView = () => {
   const useParam = useParams();
   let navigate = useNavigate();
+  const [DataLoader, setDataLoader] = useState(true);
   const PreviousPage = async () => {
     console.log(useParam.recordId);
     navigate(`/ViewDocuments/${useParam.recordId}`);
     // <Navigate to={`/ViewDocuments/${useParam.recordId}`}></Navigate>
   };
-
+  useState(() => {
+    document.title = "DOCUMENTS VIEW";
+    setTimeout(() => {
+      setDataLoader(false);
+    }, 2000);
+  }, [useParam.name]);
   return (
     <>
       <Helmet>
-        <title>Dashboard - BBA DOCUMENTS</title>
         <meta name="description" content="BBA STORE" />
       </Helmet>
       {/* Header */}
@@ -61,13 +67,35 @@ const PdfView = () => {
           <div class="card-body1">
             <div className="row">
               <div className="col-md-12">
-                <iframe
-                  src={`${BaseUrl}/uploadDoc/${useParam.name}`}
-                  width="90%"
-                  height="500%"
-                >
-                  {" "}
-                </iframe>
+                {DataLoader && (
+                  <>
+                    <LineWave
+                      style={{ color: "red" }}
+                      height="200"
+                      width="600"
+                      color="#4fa94d"
+                      ariaLabel="line-wave"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                      visible={true}
+                      firstLineColor="red"
+                      middleLineColor="yellow"
+                      lastLineColor=""
+                    />
+                  </>
+                )}
+                {!DataLoader && (
+                  <>
+                    <iframe
+                      src={`${BaseUrl}/uploadDoc/${useParam.name}`}
+                      width="97%"
+                      height="500%"
+                      style={{ margin: "0 auto" }}
+                    >
+                      {" "}
+                    </iframe>
+                  </>
+                )}
               </div>
             </div>
           </div>

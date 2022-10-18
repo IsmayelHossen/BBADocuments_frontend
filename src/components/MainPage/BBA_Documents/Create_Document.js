@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 
 import ViewDocuments from "./ViewDocuments";
 import { BaseUrl } from "./CommonUrl";
+import { LineWave, Rings } from "react-loader-spinner";
 // import Dashboard from "../MainPage/Main/Dashboard";
 
 const Create_Document = () => {
@@ -39,11 +40,12 @@ const Create_Document = () => {
     id: "",
     name: "",
   });
+  var datetime = "";
   const [fileData, setfileData] = useState([]);
   const [progress, setProgress] = useState("");
   const [progressShow, setprogressShow] = useState(false);
   useEffect(() => {
-    document.title = "Documents Add form";
+    document.title = "DOCUMENTS ADD FORM";
 
     getDataapicall();
   }, []);
@@ -51,9 +53,7 @@ const Create_Document = () => {
   const getDataapicall = () => {
     axios.get(`${BaseUrl}/documents/getdata`).then((res) => {
       console.log(res.data.data);
-      console.log("hghghgh");
-
-      console.log();
+      setDataLoader(false);
       setdata(res.data.data);
     });
   };
@@ -173,6 +173,7 @@ const Create_Document = () => {
           .then((response) => {
             if (response.data.success) {
               getDataapicall();
+              swal("Successfully Deleted!Thank You", "", "success");
             }
           })
           .catch((error) => {
@@ -224,7 +225,7 @@ const Create_Document = () => {
     },
 
     {
-      title: "Time",
+      title: "Date & Time",
       // dataIndex: "DATENTIME",
       render: (text, record) => (
         <>
@@ -245,7 +246,7 @@ const Create_Document = () => {
       render: (text, record) => (
         <>
           <Link
-            className="btn btn-success"
+            className="btn btn-success btn-sm"
             to={`/docs/viewDocuments/${record.ID}/${record.MEETING_ID}`}
           >
             <span class="fa fa-eye"></span>
@@ -259,7 +260,7 @@ const Create_Document = () => {
         <div className="">
           <div className="">
             <a
-              className="btn btn-primary"
+              className="btn btn-primary btn-sm"
               href="#"
               data-toggle="modal"
               data-target="#vendor_update"
@@ -269,12 +270,12 @@ const Create_Document = () => {
             >
               <i
                 className="fa fa-pencil"
-                style={{ fontSize: "24px", color: "white" }}
+                style={{ fontSize: "20px", color: "white" }}
               />
             </a>
             &nbsp; &nbsp; &nbsp;
             <a
-              className="btn btn-danger"
+              className="btn btn-danger btn-sm"
               href="#"
               onClick={() => {
                 DeleteIndividual_vendor(record.ID);
@@ -282,7 +283,7 @@ const Create_Document = () => {
             >
               <i
                 className="fa fa-trash-o"
-                style={{ fontSize: "24px", color: "white" }}
+                style={{ fontSize: "20px", color: "white" }}
               />
             </a>
           </div>
@@ -322,7 +323,7 @@ const Create_Document = () => {
                   <span class="fa fa-search form-control-feedback"></span>
                   <input
                     type="text"
-                    class="form-control"
+                    class="form-control bba_documents-form-control"
                     value={searchdata}
                     name="searchStatus"
                     placeholder="Search"
@@ -428,6 +429,7 @@ const Create_Document = () => {
                                 <input
                                   type="file"
                                   id="customFile"
+                                  class=" bba_documents-form-control"
                                   {...register("documents", {
                                     required: true,
                                   })}
@@ -477,20 +479,24 @@ const Create_Document = () => {
               {/* table start */}
               <div className="row">
                 <div className="col-md-12">
-                  {!DataLoader && (
+                  {DataLoader && (
                     <>
-                      {/* DataLoader */}
-                      <p className="text-center mt-5">
-                        {" "}
-                        <i
-                          class="fa fa-spinner fa-spin fa-3x fa-fw"
-                          style={{ color: "green", fontSiz: "20px" }}
-                        ></i>
-                        <span class="sr-only">Loading...</span>
-                      </p>
+                      <LineWave
+                        style={{ color: "red" }}
+                        height="200"
+                        width="600"
+                        color="#4fa94d"
+                        ariaLabel="line-wave"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                        firstLineColor="red"
+                        middleLineColor="yellow"
+                        lastLineColor=""
+                      />
                     </>
                   )}
-                  {DataLoader && (
+                  {!DataLoader && (
                     <div className="table-responsive vendor_table_box">
                       <Table
                         className="table-striped"
@@ -581,7 +587,7 @@ const Create_Document = () => {
                                 type="number"
                                 class="form-control bba_documents-form-control"
                                 placeholder="Id"
-                                defaultValue={UpdateDataFound.DOCUMENT_ID}
+                                defaultValue={UpdateDataFound.MEETING_ID}
                                 {...register1("document_id")}
                               />
                             </div>
@@ -599,7 +605,7 @@ const Create_Document = () => {
                               <input
                                 type="text"
                                 class="form-control bba_documents-form-control"
-                                placeholder=" Id"
+                                placeholder=" Document Types"
                                 id="validationDefault07"
                                 defaultValue={UpdateDataFound.NAME}
                                 {...register1("name")}

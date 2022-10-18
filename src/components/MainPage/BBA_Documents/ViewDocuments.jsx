@@ -12,6 +12,7 @@ import "../../antdstyle.css";
 import { itemRender, onShowSizeChange } from "../../paginationfunction";
 import { useForm } from "react-hook-form";
 import { BaseUrl } from "./CommonUrl";
+import { LineWave } from "react-loader-spinner";
 // import Dashboard from "../MainPage/Main/Dashboard";
 
 const ViewDocuments = () => {
@@ -36,13 +37,15 @@ const ViewDocuments = () => {
     formState: { errors },
   } = useForm();
   useEffect(() => {
+    document.title = "TYPE WISE DOCUMENTS VIEW";
+
     getDataapicall();
     getDocuments();
   }, []);
 
   const getDocuments = () => {
     axios.get(`${BaseUrl}/documents/filedata/${useParam.id}`).then((res) => {
-      console.log(res.data.data);
+      setDataLoader(false);
       setfileData(res.data.data);
     });
   };
@@ -167,7 +170,7 @@ const ViewDocuments = () => {
                 <span class="fa fa-search form-control-feedback"></span>
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control bba_documents-form-control"
                   value={searchdata}
                   name="searchStatus"
                   placeholder="Search"
@@ -220,7 +223,7 @@ const ViewDocuments = () => {
                     {/* vendor form */}
 
                     <div class="col-md-12">
-                      <form onSubmit={handleSubmit(onSubmit)}>
+                      <form onSubmit={handleSubmit(onSubmit)} class="mt-3 mb-3">
                         <div className="mb-2 row">
                           <label
                             for="inputtext"
@@ -255,7 +258,10 @@ const ViewDocuments = () => {
                         </div>
 
                         <div className="SubmitFooter">
-                          <button type="submitupdate" class="Button_success">
+                          <button
+                            type="submitupdate mt-4"
+                            class="Button_success"
+                          >
                             <span>Add</span>
                           </button>
                           <button
@@ -278,20 +284,24 @@ const ViewDocuments = () => {
           <div class="card-body1">
             <div className="row">
               <div className="col-md-12">
-                {!DataLoader && (
+                {DataLoader && (
                   <>
-                    {/* DataLoader */}
-                    <p className="text-center mt-5">
-                      {" "}
-                      <i
-                        class="fa fa-spinner fa-spin fa-3x fa-fw"
-                        style={{ color: "green", fontSiz: "20px" }}
-                      ></i>
-                      <span class="sr-only">Loading...</span>
-                    </p>
+                    <LineWave
+                      style={{ color: "red" }}
+                      height="200"
+                      width="600"
+                      color="#4fa94d"
+                      ariaLabel="line-wave"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                      visible={true}
+                      firstLineColor="red"
+                      middleLineColor="yellow"
+                      lastLineColor=""
+                    />
                   </>
                 )}
-                {DataLoader && (
+                {!DataLoader && (
                   <div className="table-responsive vendor_table_box">
                     <table class="table table-striped">
                       <thead>
@@ -332,7 +342,7 @@ const ViewDocuments = () => {
                               >
                                 <i
                                   className="fa fa-trash-o m-r-5"
-                                  style={{ fontSize: "36px", color: "red" }}
+                                  style={{ fontSize: "20px", color: "red" }}
                                 />
                               </a>
                             </td>
