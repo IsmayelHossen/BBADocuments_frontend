@@ -21,8 +21,7 @@ body {
 }
 /* whole background color change end */
 /* create vendor css */
-.form-control,
-.form-select {
+.bba_documents-form-control {
   border-color: #3c8dbc !important;
   box-shadow: none;
   font-size: 15px;
@@ -406,15 +405,7 @@ th {
     padding-top: 0em;
     padding-bottom: 0em;
   }
-  .card-body {
-    flex: 1 1 auto;
-    min-height: 1px;
 
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-    padding-top: 0em;
-    padding-bottom: 0em;
-  }
   .card-header1 {
     padding-bottom: 10px;
     padding-left: 5px;

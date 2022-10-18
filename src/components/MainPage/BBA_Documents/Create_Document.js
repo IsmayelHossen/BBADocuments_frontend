@@ -366,7 +366,7 @@ const Create_Document = () => {
                               <div className="col-sm-8">
                                 <input
                                   type="text"
-                                  class="form-control Vendor-form-control"
+                                  class="form-control bba_documents-form-control"
                                   placeholder="Id"
                                   {...register("id", {
                                     required: true,
@@ -387,7 +387,7 @@ const Create_Document = () => {
                               <div className="col-sm-8">
                                 <input
                                   type="text"
-                                  class="form-control Vendor-form-control"
+                                  class="form-control bba_documents-form-control"
                                   id="validationDefault03"
                                   placeholder=" Name"
                                   {...register("name", {
@@ -542,7 +542,7 @@ const Create_Document = () => {
                             <div className="col-sm-8">
                               <input
                                 type="number"
-                                class="form-control Vendor-form-control"
+                                class="form-control bba_documents-form-control"
                                 placeholder="Id"
                                 defaultValue={UpdateDataFound.ID}
                                 {...register1("id")}
@@ -561,7 +561,7 @@ const Create_Document = () => {
                             <div className="col-sm-8">
                               <input
                                 type="number"
-                                class="form-control Vendor-form-control"
+                                class="form-control bba_documents-form-control"
                                 placeholder="Id"
                                 defaultValue={UpdateDataFound.DOCUMENT_ID}
                                 {...register1("document_id")}
@@ -580,7 +580,7 @@ const Create_Document = () => {
                             <div className="col-sm-8">
                               <input
                                 type="text"
-                                class="form-control Vendor-form-control"
+                                class="form-control bba_documents-form-control"
                                 placeholder=" Id"
                                 id="validationDefault07"
                                 defaultValue={UpdateDataFound.NAME}
