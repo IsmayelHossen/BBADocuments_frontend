@@ -9,7 +9,7 @@ import Create_Document from "./components/MainPage/BBA_Documents/Create_Document
 import ViewDocuments from "./components/MainPage/BBA_Documents/ViewDocuments";
 import DocumentList from "./components/MainPage/BBA_Documents/DocumentList";
 import PdfView from "./components/MainPage/BBA_Documents/PdfView";
-import Catlist from "./components/MainPage/BBA_Documents/Catlist";
+
 function App() {
   return (
     <div className="App">
@@ -24,7 +24,6 @@ function App() {
             element={<ViewDocuments />}
           />
           <Route path="/docs/pdfview/:name/:recordId" element={<PdfView />} />
-          <Route path="/docs/cat" element={<Catlist />} />
           <Route path="/docs/list" element={<DocumentList />} />
         </Routes>
       </BrowserRouter>

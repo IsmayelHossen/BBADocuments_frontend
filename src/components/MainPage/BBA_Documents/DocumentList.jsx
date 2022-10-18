@@ -125,10 +125,6 @@ const DocumentList = () => {
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "ID",
-    },
-    {
       title: "Date",
       dataIndex: "DATENTIME",
     },
