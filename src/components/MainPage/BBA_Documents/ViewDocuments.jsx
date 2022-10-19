@@ -101,6 +101,7 @@ const ViewDocuments = () => {
           .then((response) => {
             if (response.data.success) {
               getDocuments();
+              swal("Successfully Deleted!", "", "success");
             }
           })
           .catch((error) => {});
@@ -137,6 +138,7 @@ const ViewDocuments = () => {
           window.$("#exampleModal").modal("hide");
           swal("Successfully Added", "", "success");
           getDocuments();
+          reset();
         }
       })
       .catch((error) => {
@@ -203,7 +205,7 @@ const ViewDocuments = () => {
             {/* ADD DOCUMENT START */}
 
             <div class="modal-dialog modal-lg" role="document">
-              <div class="modal-content">
+              <div class="modal-content modal-content_docs">
                 <div class="modal-header">
                   <h5 style={{ color: "rgba(17, 123, 108, 0.85)" }}>
                     <i class="fa fa-plus"></i> Add More File(to{" "}
@@ -223,14 +225,18 @@ const ViewDocuments = () => {
                     {/* vendor form */}
 
                     <div class="col-md-12">
-                      <form onSubmit={handleSubmit(onSubmit)} class="mt-3 mb-3">
+                      <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        class="mb-3 form_design"
+                      >
                         <div className="mb-2 row">
                           <label
                             for="inputtext"
                             class="col-sm-4 col-form-label"
                           >
                             {" "}
-                            <span style={{ color: "red" }}>*</span>Documents
+                            <span style={{ color: "red" }}>*</span>Add New
+                            Document
                           </label>
                           <div className="col-sm-8">
                             <input

@@ -371,7 +371,10 @@ const Create_Document = () => {
                         {/* vendor form */}
 
                         <div class="col-md-12">
-                          <form onSubmit={handleSubmit(onSubmit)}>
+                          <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            class="form_design"
+                          >
                             <div className="mb-2 row">
                               <label
                                 for="inputtext"
@@ -531,14 +534,18 @@ const Create_Document = () => {
                 <div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content modal-content_docs">
                     <div class="modal-header">
-                      <h5
+                      <h6
                         class="modal-title"
                         id="exampleModalLabel"
-                        style={{ fontWeight: "600", color: "#5265ac" }}
+                        style={{
+                          fontWeight: "600",
+                          color: "#5265ac",
+                          fontSize: "15px",
+                        }}
                       >
                         <i className="fa fa-pencil m-r-5" /> Update Document
                         {/*UpdateDataFound.id*/}
-                      </h5>
+                      </h6>
                       <button
                         type="button"
                         class="close"
@@ -553,7 +560,10 @@ const Create_Document = () => {
                     <div class="modal-body ">
                       <div className="row Product_add">
                         {/* vendor form */}
-                        <form onSubmit={handleSubmit1(onSubmitUpdate)}>
+                        <form
+                          onSubmit={handleSubmit1(onSubmitUpdate)}
+                          class="form_design"
+                        >
                           <div className="mb-2 row" style={{ display: "none" }}>
                             <label
                               for="inputtext"
@@ -583,7 +593,7 @@ const Create_Document = () => {
                             </label>
                             <div className="col-sm-8">
                               <input
-                                type="number"
+                                type="text"
                                 class="form-control bba_documents-form-control"
                                 placeholder="Id"
                                 defaultValue={UpdateDataFound.MEETING_ID}
