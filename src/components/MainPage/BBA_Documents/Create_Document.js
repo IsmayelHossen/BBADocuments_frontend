@@ -84,10 +84,17 @@ const Create_Document = () => {
     console.log(RearangeTime);
     const employee_id = 685;
     const formData = new FormData();
+    var meeting_date = data.meeting_date;
+    var meeting_date_day = new Date(meeting_date).getDate();
+    var meeting_date_month = new Date(meeting_date).getMonth() + 1;
+    var meeting_date_year = new Date(meeting_date).getFullYear();
+    var rearrange_meeting_date =
+      meeting_date_day + "/" + meeting_date_month + "/" + meeting_date_year;
     formData.append("datentime", RearangeTime);
     formData.append("id", data.id);
     formData.append("name", data.name);
     formData.append("employee_id", employee_id);
+    formData.append("meeting_date", rearrange_meeting_date);
     console.log(data);
     if (data.documents.length > 1) {
       for (let i = 0; i < data.documents.length; i++) {
@@ -232,7 +239,10 @@ const Create_Document = () => {
       title: "Documents Type",
       dataIndex: "NAME",
     },
-
+    {
+      title: "Date of Meeting",
+      dataIndex: "MEETING_DATE",
+    },
     {
       title: "Date & Time",
       // dataIndex: "DATENTIME",
@@ -412,6 +422,27 @@ const Create_Document = () => {
                                   id="validationDefault03"
                                   placeholder="Document name"
                                   {...register("name", {
+                                    // onChange: (e) => {handleOnchange(e)},
+                                    required: true,
+                                  })}
+                                />
+                              </div>
+                            </div>
+                            <div className="mb-2 row">
+                              <label
+                                for="inputtext"
+                                class="col-sm-4 col-form-label"
+                              >
+                                {" "}
+                                <span style={{ color: "red" }}>*</span>Date
+                              </label>
+                              <div className="col-sm-8">
+                                <input
+                                  type="date"
+                                  class="form-control bba_documents-form-control"
+                                  id="validationDefault03"
+                                  placeholder="Document name"
+                                  {...register("meeting_date", {
                                     // onChange: (e) => {handleOnchange(e)},
                                     required: true,
                                   })}
