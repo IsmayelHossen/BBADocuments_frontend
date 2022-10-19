@@ -386,7 +386,7 @@ const Create_Document = () => {
                                 <input
                                   type="text"
                                   class="form-control bba_documents-form-control"
-                                  placeholder="Id"
+                                  placeholder="Document Id"
                                   {...register("id", {
                                     required: true,
                                   })}
@@ -408,7 +408,7 @@ const Create_Document = () => {
                                   type="text"
                                   class="form-control bba_documents-form-control"
                                   id="validationDefault03"
-                                  placeholder=" Name"
+                                  placeholder="Document name"
                                   {...register("name", {
                                     // onChange: (e) => {handleOnchange(e)},
                                     required: true,
