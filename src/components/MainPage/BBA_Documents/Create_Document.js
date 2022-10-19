@@ -75,11 +75,16 @@ const Create_Document = () => {
   // submit for store vendor  data info
   const onSubmit = (data) => {
     setprogressShow(true);
-    const date = new Date().toLocaleString();
-    console.log(date);
-    const employee_id = 23498;
+    var datentime = new Date().toLocaleString();
+    var date = new Date(datentime).getDate();
+    var month = new Date(datentime).getMonth() + 1;
+    var year = new Date(datentime).getFullYear();
+    var time = datentime.split(",")[1];
+    var RearangeTime = date + "/" + month + "/" + year + "," + time;
+    console.log(RearangeTime);
+    const employee_id = 685;
     const formData = new FormData();
-    formData.append("datentime", date);
+    formData.append("datentime", RearangeTime);
     formData.append("id", data.id);
     formData.append("name", data.name);
     formData.append("employee_id", employee_id);
@@ -212,8 +217,12 @@ const Create_Document = () => {
   //table
   const columns = [
     {
-      title: "Employee  Booked Id",
-      dataIndex: "EMP_ID",
+      title: "Name of Registrant",
+      dataIndex: "NAME_1",
+    },
+    {
+      title: "Designation",
+      dataIndex: "DES_NAME",
     },
     {
       title: "Documents ID",
@@ -227,17 +236,7 @@ const Create_Document = () => {
     {
       title: "Date & Time",
       // dataIndex: "DATENTIME",
-      render: (text, record) => (
-        <>
-          {new Date(record.DATENTIME).getDate() +
-            "/" +
-            new Date(record.DATENTIME).getMonth() +
-            "/" +
-            new Date(record.DATENTIME).getFullYear() +
-            "," +
-            record.DATENTIME.split(",")[1]}
-        </>
-      ),
+      render: (text, record) => <>{record.DATENTIME}</>,
     },
 
     {
@@ -353,7 +352,7 @@ const Create_Document = () => {
                 {/* ADD DOCUMENT START */}
 
                 <div class="modal-dialog modal-lg" role="document">
-                  <div class="modal-content">
+                  <div class="modal-content modal-content_docs">
                     <div class="modal-header">
                       <h5 style={{ color: "rgba(17, 123, 108, 0.85)" }}>
                         <i class="fa fa-plus"></i> Add Document
@@ -530,7 +529,7 @@ const Create_Document = () => {
                 aria-hidden="true"
               >
                 <div class="modal-dialog modal-lg" role="document">
-                  <div class="modal-content">
+                  <div class="modal-content modal-content_docs">
                     <div class="modal-header">
                       <h5
                         class="modal-title"
