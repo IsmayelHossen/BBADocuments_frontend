@@ -130,6 +130,10 @@ const DocumentList = () => {
       dataIndex: "DATENTIME",
     },
     {
+      title: "Held on the date",
+      dataIndex: "MEETING_DATE",
+    },
+    {
       title: "Documents Type",
       dataIndex: "NAME",
     },

@@ -135,13 +135,16 @@ const Create_Document = () => {
 
   const onSubmitUpdate = async (data) => {
     if (data.document_id == "") {
-      data.document_id = UpdateDataFound.DOCUMENT_ID;
+      data.document_id = UpdateDataFound.MEETING_ID;
     }
     if (data.name == "") {
       data.name = UpdateDataFound.NAME;
     }
     if (data.id == "") {
       data.id = UpdateDataFound.ID;
+    }
+    if (data.meeting_date == "") {
+      data.meeting_date = UpdateDataFound.MEETING_DATE;
     }
 
     console.log(data);
@@ -240,7 +243,7 @@ const Create_Document = () => {
       dataIndex: "NAME",
     },
     {
-      title: "Date of Meeting",
+      title: "Held on the date",
       dataIndex: "MEETING_DATE",
     },
     {
@@ -434,17 +437,18 @@ const Create_Document = () => {
                                 class="col-sm-4 col-form-label"
                               >
                                 {" "}
-                                <span style={{ color: "red" }}>*</span>Date
+                                <span style={{ color: "red" }}>*</span>Held on
+                                the date
                               </label>
                               <div className="col-sm-8">
                                 <input
                                   type="date"
                                   class="form-control bba_documents-form-control"
                                   id="validationDefault03"
-                                  placeholder="Document name"
+                                  placeholder="Held on the date"
                                   {...register("meeting_date", {
                                     // onChange: (e) => {handleOnchange(e)},
-                                    required: true,
+                                    required: false,
                                   })}
                                 />
                               </div>
@@ -629,6 +633,25 @@ const Create_Document = () => {
                                 placeholder="Id"
                                 defaultValue={UpdateDataFound.MEETING_ID}
                                 {...register1("document_id")}
+                              />
+                            </div>
+                          </div>
+                          <div className="mb-2 row">
+                            <label
+                              for="inputtext"
+                              class="col-sm-4 col-form-label"
+                            >
+                              {" "}
+                              <span style={{ color: "red" }}>*</span> Held on
+                              the date
+                            </label>
+                            <div className="col-sm-8">
+                              <input
+                                type="text"
+                                class="form-control bba_documents-form-control"
+                                placeholder="Held on the date"
+                                defaultValue={UpdateDataFound.MEETING_DATE}
+                                {...register1("meeting_date")}
                               />
                             </div>
                           </div>
