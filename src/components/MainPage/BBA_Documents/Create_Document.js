@@ -76,20 +76,21 @@ const Create_Document = () => {
   const onSubmit = (data) => {
     setprogressShow(true);
     var datentime = new Date().toLocaleString();
-    var date = new Date(datentime).getDate();
-    var month = new Date(datentime).getMonth() + 1;
-    var year = new Date(datentime).getFullYear();
+    var date = datentime.split("/")[1];
+    var month = datentime.split("/")[0];
+    var year = datentime.split(",")[0].split("/")[2];
     var time = datentime.split(",")[1];
     var RearangeTime = date + "/" + month + "/" + year + "," + time;
     console.log(RearangeTime);
     const employee_id = 685;
     const formData = new FormData();
     var meeting_date = data.meeting_date;
-    var meeting_date_day = new Date(meeting_date).getDate();
-    var meeting_date_month = new Date(meeting_date).getMonth() + 1;
-    var meeting_date_year = new Date(meeting_date).getFullYear();
+    var meeting_date_day = meeting_date.split("-")[2];
+    var meeting_date_month = meeting_date.split("-")[1];
+    var meeting_date_year = meeting_date.split("-")[0];
     var rearrange_meeting_date =
       meeting_date_day + "/" + meeting_date_month + "/" + meeting_date_year;
+    console.log(rearrange_meeting_date);
     formData.append("datentime", RearangeTime);
     formData.append("id", data.id);
     formData.append("name", data.name);
@@ -415,7 +416,7 @@ const Create_Document = () => {
                                 class="col-sm-4 col-form-label"
                               >
                                 {" "}
-                                <span style={{ color: "red" }}>*</span>Documents
+                                <span style={{ color: "red" }}>*</span>Document
                                 Type
                               </label>
                               <div className="col-sm-8">
@@ -423,7 +424,7 @@ const Create_Document = () => {
                                   type="text"
                                   class="form-control bba_documents-form-control"
                                   id="validationDefault03"
-                                  placeholder="Document name"
+                                  placeholder="Document Types name"
                                   {...register("name", {
                                     // onChange: (e) => {handleOnchange(e)},
                                     required: true,
@@ -460,7 +461,8 @@ const Create_Document = () => {
                                 class="col-sm-4 col-form-label"
                               >
                                 {" "}
-                                <span style={{ color: "red" }}>*</span>Documents
+                                <span style={{ color: "red" }}>*</span>Document
+                                File
                               </label>
                               <div className="col-sm-8">
                                 <input
