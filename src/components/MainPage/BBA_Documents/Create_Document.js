@@ -228,7 +228,7 @@ const Create_Document = () => {
   //table
   const columns = [
     {
-      title: "Name of Registrant",
+      title: "Entry By",
       dataIndex: "NAME_1",
     },
     {
