@@ -8,8 +8,8 @@ import { Link, useParams } from "react-router-dom";
 import swal from "sweetalert";
 
 import { Table } from "antd";
-import "../../antdstyle.css";
-import { itemRender, onShowSizeChange } from "../../paginationfunction";
+import "../antdstyle.css";
+import { itemRender, onShowSizeChange } from "../paginationfunction";
 import { useForm } from "react-hook-form";
 import { BaseUrl } from "./CommonUrl";
 import { LineWave } from "react-loader-spinner";

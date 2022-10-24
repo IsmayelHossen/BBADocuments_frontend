@@ -6,8 +6,8 @@ import { Helmet } from "react-helmet";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { Button, Table } from "antd";
-import "../../antdstyle.css";
-import { itemRender, onShowSizeChange } from "../../paginationfunction";
+import "../antdstyle.css";
+import { itemRender, onShowSizeChange } from "../paginationfunction";
 import { BaseUrl } from "./CommonUrl";
 import { LineWave } from "react-loader-spinner";
 

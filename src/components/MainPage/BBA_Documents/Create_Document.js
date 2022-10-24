@@ -10,8 +10,8 @@ import { useForm } from "react-hook-form";
  * for paginationn and data table
  */
 import { Table } from "antd";
-import "../../antdstyle.css";
-import { itemRender, onShowSizeChange } from "../../paginationfunction";
+import "../antdstyle.css";
+import { itemRender, onShowSizeChange } from "../paginationfunction";
 /**
  * for paginationn and data table end
  */

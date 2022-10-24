@@ -8,9 +8,8 @@ import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { Table } from "antd";
-import "../../antdstyle.css";
-import { itemRender, onShowSizeChange } from "../../paginationfunction";
-
+import "../antdstyle.css";
+import { itemRender, onShowSizeChange } from "../paginationfunction";
 import swal from "sweetalert";
 import "../../../index.css";
 
