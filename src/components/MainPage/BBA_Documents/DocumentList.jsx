@@ -69,7 +69,7 @@ const DocumentList = () => {
       getDocument();
     } else {
       axios
-        .get(`${BaseUrl}/documents/all_documents_searchh/${search}`)
+        .get(`${BaseUrl}/documents/all_documents_search/${search}`)
         .then((response) => {
           console.log(response.data);
           // console.log(response.data.data);
@@ -155,25 +155,6 @@ const DocumentList = () => {
         </>
       ),
     },
-
-    {
-      title: "Action",
-      render: (text, rowKey) => (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <a
-          className="dropdown-item"
-          href="#"
-          onClick={() => {
-            DeleteIndividual(rowKey.ID, rowKey.FILENAME);
-          }}
-        >
-          <i
-            className="fa fa-trash-o m-r-5"
-            style={{ fontSize: "26px", color: "red" }}
-          />
-        </a>
-      ),
-    },
   ];
 
   return (
@@ -192,7 +173,7 @@ const DocumentList = () => {
               className="text-center mx-auto mb-3 text-uppercase fddd"
               id="hddd"
             >
-              BBA DOCUMENT LIST({fileData.length})
+              BBA DOCUMENTS LIST
             </h4>
             <div className="d-flex justify-content-between align-items-center Page_header_title_search">
               <div
@@ -209,6 +190,11 @@ const DocumentList = () => {
                   onChange={(e) => SearchData(e)}
                 />
               </div>
+              <div>
+                <button class="Button_success">
+                  Total File:({fileData.length})
+                </button>
+              </div>
             </div>
           </div>
           <div class="card-body1">
@@ -219,7 +205,7 @@ const DocumentList = () => {
                     <LineWave
                       style={{ color: "red" }}
                       height="200"
-                      width="600"
+                      width="800"
                       color="#4fa94d"
                       ariaLabel="line-wave"
                       wrapperStyle={{}}
