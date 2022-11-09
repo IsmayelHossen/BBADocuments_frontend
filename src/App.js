@@ -9,6 +9,7 @@ import Create_Document from "./components/MainPage/BBA_Documents/Create_Document
 import ViewDocuments from "./components/MainPage/BBA_Documents/ViewDocuments";
 import DocumentList from "./components/MainPage/BBA_Documents/DocumentList";
 import PdfView from "./components/MainPage/BBA_Documents/PdfView";
+import Docs_Category from "./components/MainPage/BBA_Documents/Docs_Category";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/docs" element={<Dashboard />} />
           <Route path="/docs/add" element={<Create_Document />} />
+          <Route path="/docs/add/category" element={<Docs_Category />} />
           <Route
             path="/docs/ViewDocuments/:id/:document_id"
             element={<ViewDocuments />}

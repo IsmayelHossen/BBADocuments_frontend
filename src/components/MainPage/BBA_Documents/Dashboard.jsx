@@ -48,9 +48,7 @@ const Dashboard = ({ alldata9 }) => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                <h3 className="page-title text-start">
-                  BBA Documents Dashboard
-                </h3>
+                <h3 className="page-title text-start">BBA Archive Dashboard</h3>
               </div>
             </div>
           </div>

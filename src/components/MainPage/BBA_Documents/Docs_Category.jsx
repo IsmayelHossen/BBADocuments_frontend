@@ -1,6 +1,3 @@
-/**
- * Vendor Add Information component
- */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -25,7 +22,7 @@ import { BaseUrl } from "./CommonUrl";
 import { LineWave, Rings } from "react-loader-spinner";
 // import Dashboard from "../MainPage/Main/Dashboard";
 
-const Create_Document = () => {
+const Docs_Category = () => {
   const [DataLoader, setDataLoader] = useState(true);
   const [Vendor_data, SetVendorData] = useState([]);
   const [Vendor_Info, setVendorInfo] = useState([]);
@@ -51,7 +48,7 @@ const Create_Document = () => {
   }, []);
 
   const getDataapicall = () => {
-    axios.get(`${BaseUrl}/documents/getdata`).then((res) => {
+    axios.get(`${BaseUrl}/documents/category/view`).then((res) => {
       console.log(res.data.data);
       setDataLoader(false);
       setdata(res.data.data);
@@ -74,57 +71,17 @@ const Create_Document = () => {
 
   // submit for store vendor  data info
   const onSubmit = (data) => {
-    setprogressShow(true);
-    var datentime = new Date().toLocaleString();
-    var date = datentime.split("/")[1];
-    var month = datentime.split("/")[0];
-    var year = datentime.split(",")[0].split("/")[2];
-    var time = datentime.split(",")[1];
-    var RearangeTime = date + "/" + month + "/" + year + "," + time;
-    console.log(RearangeTime);
-    const employee_id = 685;
-    const formData = new FormData();
-    var meeting_date = data.meeting_date;
-    var meeting_date_day = meeting_date.split("-")[2];
-    var meeting_date_month = meeting_date.split("-")[1];
-    var meeting_date_year = meeting_date.split("-")[0];
-    var rearrange_meeting_date =
-      meeting_date_day + "/" + meeting_date_month + "/" + meeting_date_year;
-    console.log(rearrange_meeting_date);
-    formData.append("datentime", RearangeTime);
-    formData.append("id", data.id);
-    formData.append("name", data.name);
-    formData.append("employee_id", employee_id);
-    formData.append("meeting_date", rearrange_meeting_date);
     console.log(data);
-    if (data.documents.length > 1) {
-      for (let i = 0; i < data.documents.length; i++) {
-        formData.append("documents", data.documents[i]);
+    axios.post(`${BaseUrl}/documents/category/add`, data).then((response) => {
+      if (response) {
+        console.log(response.data.data);
+        window.$("#exampleModal").modal("hide");
+        getDataapicall();
       }
-    } else {
-      formData.append("documents", data.documents[0]);
-    }
-    axios
-      .post(`${BaseUrl}/documents/process_post`, formData, {
-        onUploadProgress: (data) => {
-          //Set the progress value to show the progress bar
-          console.log(data);
-          setProgress(Math.round((100 * data.loaded) / data.total));
-        },
-      })
-      .then((response) => {
-        if (response) {
-          console.log(response.data.data);
-          window.$("#exampleModal").modal("hide");
-          getDataapicall();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    });
   };
 
-  const EditIndividual = (id) => {
+  const EditCategory = (id) => {
     console.log(Alldata);
     //set update id
     setUpdateId(id);
@@ -135,23 +92,14 @@ const Create_Document = () => {
   };
 
   const onSubmitUpdate = async (data) => {
-    if (data.document_id == "") {
-      data.document_id = UpdateDataFound.MEETING_ID;
-    }
-    if (data.name == "") {
-      data.name = UpdateDataFound.NAME;
-    }
-    if (data.id == "") {
-      data.id = UpdateDataFound.ID;
-    }
-    if (data.meeting_date == "") {
-      data.meeting_date = UpdateDataFound.MEETING_DATE;
+    if (data.category_name == "") {
+      data.category_name = UpdateDataFound.CATEGORY_NAME;
     }
 
     console.log(data);
 
     const updateResult = await axios
-      .put(`${BaseUrl}/documents/update/${data.id}`, data)
+      .put(`${BaseUrl}/documents/category/update/${UpdateId}`, data)
       .then((response) => {
         if (response.data.success) {
           getDataapicall();
@@ -174,9 +122,7 @@ const Create_Document = () => {
   };
 
   //data delete
-  const DeleteIndividual_vendor = (id) => {
-    setvendorDeleteId(id);
-
+  const DeleteCategory = (id) => {
     swal({
       title: "Are you sure want to delete?",
       icon: "warning",
@@ -185,7 +131,7 @@ const Create_Document = () => {
     }).then(async (result) => {
       if (result) {
         const abc = await axios
-          .delete(`${BaseUrl}/documents/delete/${id}`)
+          .delete(`${BaseUrl}/documents/category/delete/${id}`)
           .then((response) => {
             if (response.data.success) {
               getDataapicall();
@@ -212,7 +158,7 @@ const Create_Document = () => {
     } else {
       const searchby_lowercase = search.toLowerCase();
       axios
-        .get(`${BaseUrl}/documents/search/${searchby_lowercase}`)
+        .get(`${BaseUrl}/documents/category/search/${searchby_lowercase}`)
         .then((response) => {
           console.log(response.data);
           // console.log(response.data.data);
@@ -235,39 +181,12 @@ const Create_Document = () => {
     //   title: "Designation",
     //   dataIndex: "DES_NAME",
     // },
-    {
-      title: "Documents Type",
-      dataIndex: "NAME",
-    },
-    {
-      title: "Documents ID",
-      dataIndex: "MEETING_ID",
-    },
 
     {
-      title: "Held on the date",
-      dataIndex: "MEETING_DATE",
-    },
-    {
-      title: "Date & Time",
-      // dataIndex: "DATENTIME",
-      render: (text, record) => <>{record.DATENTIME}</>,
+      title: "Category Name",
+      dataIndex: "CATEGORY_NAME",
     },
 
-    {
-      title: "Documents Details",
-
-      render: (text, record) => (
-        <>
-          <Link
-            className="btn btn-success btn-sm"
-            to={`/docs/viewDocuments/${record.ID}/${record.MEETING_ID}`}
-          >
-            <span class="fa fa-eye"></span>
-          </Link>
-        </>
-      ),
-    },
     {
       title: "Action",
       render: (text, record) => (
@@ -279,7 +198,7 @@ const Create_Document = () => {
               data-toggle="modal"
               data-target="#vendor_update"
               onClick={() => {
-                EditIndividual(record.ID);
+                EditCategory(record.ID);
               }}
             >
               <i
@@ -292,7 +211,7 @@ const Create_Document = () => {
               className="btn btn-danger btn-sm"
               href="#"
               onClick={() => {
-                DeleteIndividual_vendor(record.ID);
+                DeleteCategory(record.ID);
               }}
             >
               <i
@@ -325,7 +244,7 @@ const Create_Document = () => {
                   className="text-center mx-auto mb-3 text-uppercase fddd"
                   id="hddd"
                 >
-                  Welcome To BBA Archive
+                  {/* Welcome To Documents Management */}
                 </h4>
               </div>
               {/* header */}
@@ -350,7 +269,7 @@ const Create_Document = () => {
                   data-toggle="modal"
                   data-target="#exampleModal"
                 >
-                  <i class="fa fa-plus"></i> <span>Add Document</span>
+                  <i class="fa fa-plus"></i> <span>Add Category</span>
                 </button>
               </div>
             </div>
@@ -370,7 +289,7 @@ const Create_Document = () => {
                   <div class="modal-content modal-content_docs">
                     <div class="modal-header">
                       <h5 style={{ color: "rgba(17, 123, 108, 0.85)" }}>
-                        <i class="fa fa-plus"></i> Add Document
+                        <i class="fa fa-plus"></i> Add Category
                       </h5>
                       <button
                         type="button"
@@ -397,98 +316,18 @@ const Create_Document = () => {
                               >
                                 {" "}
                                 <span style={{ color: "red" }}>*</span>Document
-                                Id
+                                Category Name
                               </label>
                               <div className="col-sm-8">
                                 <input
                                   type="text"
                                   class="form-control bba_documents-form-control"
-                                  placeholder="Document Id"
-                                  {...register("id", {
+                                  placeholder="Category Name"
+                                  {...register("category_name", {
                                     required: true,
                                   })}
                                 />
                               </div>
-                            </div>
-
-                            <div className="mb-2 row">
-                              <label
-                                for="inputtext"
-                                class="col-sm-4 col-form-label"
-                              >
-                                {" "}
-                                <span style={{ color: "red" }}>*</span>Document
-                                Type
-                              </label>
-                              <div className="col-sm-8">
-                                <input
-                                  type="text"
-                                  class="form-control bba_documents-form-control"
-                                  id="validationDefault03"
-                                  placeholder="Document Types name"
-                                  {...register("name", {
-                                    // onChange: (e) => {handleOnchange(e)},
-                                    required: true,
-                                  })}
-                                />
-                              </div>
-                            </div>
-                            <div className="mb-2 row">
-                              <label
-                                for="inputtext"
-                                class="col-sm-4 col-form-label"
-                              >
-                                {" "}
-                                <span style={{ color: "red" }}>*</span>Held on
-                                the date
-                              </label>
-                              <div className="col-sm-8">
-                                <input
-                                  type="date"
-                                  class="form-control bba_documents-form-control"
-                                  id="validationDefault03"
-                                  placeholder="Held on the date"
-                                  {...register("meeting_date", {
-                                    // onChange: (e) => {handleOnchange(e)},
-                                    required: false,
-                                  })}
-                                />
-                              </div>
-                            </div>
-
-                            <div className="mb-2 row">
-                              <label
-                                for="inputtext"
-                                class="col-sm-4 col-form-label"
-                              >
-                                {" "}
-                                <span style={{ color: "red" }}>*</span>Document
-                                File
-                              </label>
-                              <div className="col-sm-8">
-                                <input
-                                  type="file"
-                                  id="customFile"
-                                  class=" bba_documents-form-control"
-                                  {...register("documents", {
-                                    required: true,
-                                  })}
-                                  multiple
-                                />
-                              </div>
-                              {progressShow && (
-                                <>
-                                  <div class="progress mb-2">
-                                    <div
-                                      class="progress-bar progress-bar-striped bg-success"
-                                      role="progressbar"
-                                      style={{ width: `${progress}%` }}
-                                    >
-                                      {progress}%
-                                    </div>
-                                  </div>
-                                </>
-                              )}
                             </div>
 
                             <div className="SubmitFooter">
@@ -582,6 +421,7 @@ const Create_Document = () => {
                         }}
                       >
                         <i className="fa fa-pencil m-r-5" /> Update Document
+                        Category
                         {/*UpdateDataFound.id*/}
                       </h6>
                       <button
@@ -626,55 +466,16 @@ const Create_Document = () => {
                               class="col-sm-4 col-form-label"
                             >
                               {" "}
-                              <span style={{ color: "red" }}>*</span> document
-                              id
+                              <span style={{ color: "red" }}>*</span>Category
+                              Name
                             </label>
                             <div className="col-sm-8">
                               <input
                                 type="text"
                                 class="form-control bba_documents-form-control"
-                                placeholder="Id"
-                                defaultValue={UpdateDataFound.MEETING_ID}
-                                {...register1("document_id")}
-                              />
-                            </div>
-                          </div>
-                          <div className="mb-2 row">
-                            <label
-                              for="inputtext"
-                              class="col-sm-4 col-form-label"
-                            >
-                              {" "}
-                              <span style={{ color: "red" }}>*</span> Held on
-                              the date
-                            </label>
-                            <div className="col-sm-8">
-                              <input
-                                type="text"
-                                class="form-control bba_documents-form-control"
-                                placeholder="Held on the date"
-                                defaultValue={UpdateDataFound.MEETING_DATE}
-                                {...register1("meeting_date")}
-                              />
-                            </div>
-                          </div>
-                          <div className="mb-2 row ">
-                            <label
-                              for="inputtext"
-                              class="col-sm-4 col-form-label"
-                            >
-                              {" "}
-                              <span style={{ color: "red" }}>*</span>Documents
-                              Type
-                            </label>
-                            <div className="col-sm-8">
-                              <input
-                                type="text"
-                                class="form-control bba_documents-form-control"
-                                placeholder=" Document Types"
-                                id="validationDefault07"
-                                defaultValue={UpdateDataFound.NAME}
-                                {...register1("name")}
+                                placeholder="Category Name"
+                                defaultValue={UpdateDataFound.CATEGORY_NAME}
+                                {...register1("category_name")}
                               />
                             </div>
                           </div>
@@ -707,4 +508,4 @@ const Create_Document = () => {
   );
 };
 
-export default Create_Document;
+export default Docs_Category;

@@ -45,6 +45,16 @@ const Sidebar = () => {
                 <ul style={{ display: "none" }}>
                   <li>
                     <Link
+                      className={
+                        pathname.includes("/docs/Add/category") ? "active" : ""
+                      }
+                      to="/docs/Add/category"
+                    >
+                      Add New Category
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       className={pathname.includes("/docs/Add") ? "active" : ""}
                       to="/docs/Add"
                     >
