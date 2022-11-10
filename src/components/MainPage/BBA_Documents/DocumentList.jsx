@@ -30,18 +30,17 @@ const DocumentList = () => {
 
   const [counter, setCounter] = useState(1);
   const [file, setFile] = useState([]);
-  const [intialValue, setintialValue] = useState({
-    id: "",
-    name: "",
-  });
   const useParam = useParams();
   const [filteredData, setfilteredData] = useState({});
 
   const [fileData, setfileData] = useState([]);
+  const [categoryData, setcategoryData] = useState("");
+  const [FilterSearch, setFilterSearch] = useState("");
   useEffect(() => {
     document.title = "BBA DOCUMENT LIST";
     getDataapicall();
     getDocument();
+    getCategory();
   }, []);
 
   const {
@@ -59,17 +58,15 @@ const DocumentList = () => {
     });
   };
 
-  //search vendor
-  const SearchData = (e) => {
-    console.log(e.target.value);
-    //e.preventDefault();
-    setsearchdata(e.target.value);
-    const search = e.target.value;
-    if (search == "") {
-      getDocument();
-    } else {
+  //search and filter
+
+  const handleOnchangeforlast_id = async (e) => {
+    const filter = e.target.value;
+    console.log(filter);
+    if (filter != "") {
+      setFilterSearch(e.target.value);
       axios
-        .get(`${BaseUrl}/documents/all_documents_search/${search}`)
+        .get(`${BaseUrl}/documents/all_documents_filter/${filter}`)
         .then((response) => {
           console.log(response.data);
           // console.log(response.data.data);
@@ -79,6 +76,52 @@ const DocumentList = () => {
         .catch((error) => {
           console.error(error);
         });
+    } else {
+      getDocument();
+    }
+  };
+  //get last stage filter data
+  const lastStageFilterDataBack = (filterSearch) => {
+    axios
+      .get(`${BaseUrl}/documents/all_documents_filter/${filterSearch}`)
+      .then((response) => {
+        console.log(response.data);
+        // console.log(response.data.data);
+        setdata("");
+        setfileData(response.data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const SearchData = (e) => {
+    //first of all  filter check
+    if (FilterSearch == "") {
+      swal("Please Filter data select first", "", "warning");
+    } else {
+      const search = e.target.value;
+      setsearchdata(e.target.value);
+      console.log(search);
+      if (FilterSearch == "" && search == "") {
+        getDocument();
+      } else if (search == "") {
+        lastStageFilterDataBack(FilterSearch);
+      } else {
+        axios
+          .get(
+            `${BaseUrl}/documents/all_documents_search/${search}/${FilterSearch}`
+          )
+          .then((response) => {
+            console.log(response.data);
+            // console.log(response.data.data);
+            setdata("");
+            setfileData(response.data.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     }
   };
 
@@ -121,11 +164,19 @@ const DocumentList = () => {
       setfilteredData(filteredData[0]);
     });
   };
+
+  const getCategory = () => {
+    axios.get(`${BaseUrl}/documents/category/view`).then((res) => {
+      console.log(res.data.data);
+      setDataLoader(false);
+      setcategoryData(res.data.data);
+    });
+  };
   const date = new Date().toLocaleTimeString();
 
   const columns = [
     {
-      title: "Date",
+      title: "Entry Date",
       dataIndex: "DATENTIME",
     },
     {
@@ -136,9 +187,13 @@ const DocumentList = () => {
       title: "Documents Type",
       dataIndex: "NAME",
     },
+    {
+      title: "Document Id",
+      dataIndex: "MEETING_ID",
+    },
 
     {
-      title: "Documents Name",
+      title: "File Name",
       dataIndex: "FILENAME",
     },
     {
@@ -161,7 +216,7 @@ const DocumentList = () => {
     <>
       {console.log("render344")}
       <Helmet>
-        <title>Dashboard - BBA DOCUMENT</title>
+        <title>Dashboard - BBA ARCHIVE</title>
         <meta name="description" content="BBA STORE" />
       </Helmet>
       {/* Header */}
@@ -173,24 +228,59 @@ const DocumentList = () => {
               className="text-center mx-auto mb-3 text-uppercase fddd"
               id="hddd"
             >
-              BBA DOCUMENTS LIST
+              BBA ARCHIVE LIST
             </h4>
             <div className="d-flex justify-content-between align-items-center Page_header_title_search">
-              <div
-                class="form-group has-search"
-                style={{ marginBottom: "0px" }}
-              >
-                <span class="fa fa-search form-control-feedback"></span>
-                <input
-                  type="text"
-                  class="form-control bba_documents-form-control"
-                  value={searchdata}
-                  name="searchStatus"
-                  placeholder="Search"
-                  onChange={(e) => SearchData(e)}
-                />
+              <div class="row ">
+                <div class="col-md-7">
+                  <div className="mb-2 row">
+                    <label for="inputtext" class="col-sm-2 col-form-label">
+                      {" "}
+                      Filter
+                    </label>
+                    <div className="col-sm-10">
+                      <select
+                        class="form-select form-control bba_documents-form-control"
+                        {...register("document_type", {
+                          onChange: (e) => {
+                            handleOnchangeforlast_id(e);
+                          },
+                          required: true,
+                        })}
+                      >
+                        <option value="">Select Type</option>
+                        {categoryData.length > 0 && (
+                          <>
+                            {categoryData.map((row, index) => (
+                              <option value={row.CATEGORY_NAME}>
+                                {row.CATEGORY_NAME}
+                              </option>
+                            ))}
+                          </>
+                        )}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div
+                    class="form-group has-search"
+                    style={{ marginBottom: "0px" }}
+                  >
+                    <span class="fa fa-search form-control-feedback"></span>
+                    <input
+                      type="text"
+                      class="form-control bba_documents-form-control"
+                      value={searchdata}
+                      name="searchStatus"
+                      placeholder="Search by Id,filename,held date"
+                      onChange={(e) => SearchData(e)}
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
+
+              <div class="ml-4">
                 <button class="Button_success">
                   Total File:({fileData.length})
                 </button>

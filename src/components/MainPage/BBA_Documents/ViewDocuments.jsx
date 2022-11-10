@@ -161,15 +161,15 @@ const ViewDocuments = () => {
               className="text-center mx-auto mb-3 text-uppercase fddd"
               id="hddd"
             >
-              BBA DOCUMENT LIST<br></br>
-              Documents Type: {filteredData.NAME}
+              BBA ARCHIVE <br></br>
+              Documents Type: {filteredData.NAME}-({useParam.document_id})
             </h4>
             <div className="d-flex justify-content-between align-items-center Page_header_title_search">
               <div
                 class="form-group has-search"
                 style={{ marginBottom: "0px" }}
               >
-                <span class="fa fa-search form-control-feedback"></span>
+                {/* <span class="fa fa-search form-control-feedback"></span>
                 <input
                   type="text"
                   class="form-control bba_documents-form-control"
@@ -177,7 +177,8 @@ const ViewDocuments = () => {
                   name="searchStatus"
                   placeholder="Search"
                   onChange={(e) => SearchData(e)}
-                />
+                /> */}
+                Held on the Date: {filteredData.MEETING_DATE}
               </div>
               <div>
                 <button
@@ -313,9 +314,9 @@ const ViewDocuments = () => {
                       <thead>
                         <tr>
                           <th>SN</th>
-                          <th>Date</th>
+                          <th>Entry Date</th>
 
-                          <th>Document</th>
+                          <th>File Name</th>
                           <th>Download</th>
                           <th>Action</th>
                         </tr>

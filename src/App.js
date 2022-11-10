@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route path="/docs" element={<Dashboard />} />
           <Route path="/docs/add" element={<Create_Document />} />
-          <Route path="/docs/add/category" element={<Docs_Category />} />
+          <Route path="/docs/category/add" element={<Docs_Category />} />
           <Route
             path="/docs/ViewDocuments/:id/:document_id"
             element={<ViewDocuments />}

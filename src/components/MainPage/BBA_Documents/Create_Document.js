@@ -27,11 +27,8 @@ import { LineWave, Rings } from "react-loader-spinner";
 
 const Create_Document = () => {
   const [DataLoader, setDataLoader] = useState(true);
-  const [Vendor_data, SetVendorData] = useState([]);
-  const [Vendor_Info, setVendorInfo] = useState([]);
   const [searchdata, setsearchdata] = useState("");
   const [UpdateDataFound, setUpdateDataFound] = useState({});
-  const [usedatafromApi, setusedatafromApi] = useState({});
   const [vendorDeleteId, setvendorDeleteId] = useState("");
   const [Alldata, setdata] = useState([]);
   const [UpdateId, setUpdateId] = useState();
@@ -40,14 +37,18 @@ const Create_Document = () => {
     id: "",
     name: "",
   });
-  var datetime = "";
-  const [fileData, setfileData] = useState([]);
   const [progress, setProgress] = useState("");
   const [progressShow, setprogressShow] = useState(false);
+  const [documentType, setdocumentType] = useState("");
+  const [lastDocId, setlastDocId] = useState("");
+  const [nextDocId, setnextDocId] = useState("");
+  const [categoryData, setcategoryData] = useState("");
+  const [lastIdLoadder, setlastIdLoadder] = useState(false);
   useEffect(() => {
     document.title = "DOCUMENTS ADD FORM";
 
     getDataapicall();
+    getCategory();
   }, []);
 
   const getDataapicall = () => {
@@ -57,7 +58,13 @@ const Create_Document = () => {
       setdata(res.data.data);
     });
   };
-
+  const getCategory = () => {
+    axios.get(`${BaseUrl}/documents/category/view`).then((res) => {
+      console.log(res.data.data);
+      setDataLoader(false);
+      setcategoryData(res.data.data);
+    });
+  };
   const {
     register,
     handleSubmit,
@@ -72,7 +79,22 @@ const Create_Document = () => {
     formState: { errors: errors2 },
   } = useForm();
 
-  // submit for store vendor  data info
+  //get last documents id
+  const handleOnchangeforlast_id = async (e) => {
+    setdocumentType(e.target.value);
+
+    console.log(e.target.value);
+    await axios
+      .get(`${BaseUrl}/documents/getlastId/${e.target.value}`)
+      .then((res) => {
+        setlastDocId(Number(res.data.data[0].ID));
+        setnextDocId(Number(res.data.data[0].ID) + 1);
+        setlastIdLoadder(true);
+      });
+  };
+
+  // submit for store documents
+
   const onSubmit = (data) => {
     setprogressShow(true);
     var datentime = new Date().toLocaleString();
@@ -91,9 +113,14 @@ const Create_Document = () => {
     var rearrange_meeting_date =
       meeting_date_day + "/" + meeting_date_month + "/" + meeting_date_year;
     console.log(rearrange_meeting_date);
+
+    if (data.doc_id == "") {
+      data.doc_id = nextDocId;
+    }
+
     formData.append("datentime", RearangeTime);
-    formData.append("id", data.id);
-    formData.append("name", data.name);
+    formData.append("id", data.doc_id);
+    formData.append("name", documentType);
     formData.append("employee_id", employee_id);
     formData.append("meeting_date", rearrange_meeting_date);
     console.log(data);
@@ -117,6 +144,9 @@ const Create_Document = () => {
           console.log(response.data.data);
           window.$("#exampleModal").modal("hide");
           getDataapicall();
+          reset();
+          setnextDocId("");
+          setdocumentType("");
         }
       })
       .catch((error) => {
@@ -249,7 +279,7 @@ const Create_Document = () => {
       dataIndex: "MEETING_DATE",
     },
     {
-      title: "Date & Time",
+      title: "Entry Date & Time",
       // dataIndex: "DATENTIME",
       render: (text, record) => <>{record.DATENTIME}</>,
     },
@@ -340,7 +370,7 @@ const Create_Document = () => {
                     class="form-control bba_documents-form-control"
                     value={searchdata}
                     name="searchStatus"
-                    placeholder="Search"
+                    placeholder="Search by type,id,held date"
                     onChange={(e) => SearchData(e)}
                   />
                 </div>
@@ -397,42 +427,81 @@ const Create_Document = () => {
                               >
                                 {" "}
                                 <span style={{ color: "red" }}>*</span>Document
-                                Id
-                              </label>
-                              <div className="col-sm-8">
-                                <input
-                                  type="text"
-                                  class="form-control bba_documents-form-control"
-                                  placeholder="Document Id"
-                                  {...register("id", {
-                                    required: true,
-                                  })}
-                                />
-                              </div>
-                            </div>
-
-                            <div className="mb-2 row">
-                              <label
-                                for="inputtext"
-                                class="col-sm-4 col-form-label"
-                              >
-                                {" "}
-                                <span style={{ color: "red" }}>*</span>Document
                                 Type
                               </label>
                               <div className="col-sm-8">
-                                <input
-                                  type="text"
-                                  class="form-control bba_documents-form-control"
-                                  id="validationDefault03"
-                                  placeholder="Document Types name"
-                                  {...register("name", {
-                                    // onChange: (e) => {handleOnchange(e)},
+                                <select
+                                  class="form-select form-control bba_documents-form-control"
+                                  {...register("document_type", {
+                                    onChange: (e) => {
+                                      handleOnchangeforlast_id(e);
+                                    },
                                     required: true,
                                   })}
-                                />
+                                >
+                                  <option value="">Select Type</option>
+                                  {categoryData.length > 0 && (
+                                    <>
+                                      {categoryData.map((row, index) => (
+                                        <option value={row.CATEGORY_NAME}>
+                                          {row.CATEGORY_NAME}
+                                        </option>
+                                      ))}
+                                    </>
+                                  )}
+                                </select>
                               </div>
                             </div>
+
+                            {/* after select category this secton will show ..start*/}
+                            {documentType != "" && (
+                              <>
+                                <div className="mb-2 row">
+                                  <label
+                                    for="inputtext"
+                                    class="col-sm-4 col-form-label"
+                                  >
+                                    {" "}
+                                    <span style={{ color: "red" }}>*</span>
+                                    Document Id
+                                  </label>
+                                  <div className="col-sm-8">
+                                    {!lastIdLoadder && (
+                                      <>
+                                        <div
+                                          class="spinner-border text-primary"
+                                          role="status"
+                                        >
+                                          <span class="visually-hidden">
+                                            Loading...
+                                          </span>
+                                        </div>
+                                      </>
+                                    )}
+                                    <input
+                                      type="text"
+                                      class="form-control bba_documents-form-control"
+                                      placeholder="Document ID"
+                                      // defaultValue={nextDocId}
+                                      {...register("doc_id", {
+                                        required: true,
+                                      })}
+                                    />
+                                    <span>
+                                      Last Document entry number is:
+                                      {lastDocId == null ? "0" : lastDocId} &
+                                      next will be{" "}
+                                      <span style={{ color: "red" }}>
+                                        {nextDocId}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            )}
+
+                            {/* after select category this secton will show ..end*/}
+
                             <div className="mb-2 row">
                               <label
                                 for="inputtext"
@@ -450,7 +519,7 @@ const Create_Document = () => {
                                   placeholder="Held on the date"
                                   {...register("meeting_date", {
                                     // onChange: (e) => {handleOnchange(e)},
-                                    required: false,
+                                    required: true,
                                   })}
                                 />
                               </div>
@@ -541,7 +610,7 @@ const Create_Document = () => {
                       <Table
                         className="table-striped"
                         pagination={{
-                          total: Alldata?.length,
+                          total: Alldata.length > 0 ? Alldata : 0,
                           showTotal: (total, range) =>
                             `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                           showSizeChanger: true,
@@ -667,7 +736,7 @@ const Create_Document = () => {
                               <span style={{ color: "red" }}>*</span>Documents
                               Type
                             </label>
-                            <div className="col-sm-8">
+                            {/* <div className="col-sm-8">
                               <input
                                 type="text"
                                 class="form-control bba_documents-form-control"
@@ -676,6 +745,38 @@ const Create_Document = () => {
                                 defaultValue={UpdateDataFound.NAME}
                                 {...register1("name")}
                               />
+                            </div> */}
+
+                            <div className="col-sm-8">
+                              <select
+                                class="form-select form-control bba_documents-form-control"
+                                {...register1("name")}
+                              >
+                                {categoryData.length > 0 && (
+                                  <>
+                                    {categoryData.map((row, index) => (
+                                      <>
+                                        {row.CATEGORY_NAME ==
+                                          UpdateDataFound.NAME && (
+                                          <option
+                                            value={row.CATEGORY_NAME}
+                                            selected="selected"
+                                          >
+                                            {UpdateDataFound.NAME}
+                                          </option>
+                                        )}
+
+                                        {row.CATEGORY_NAME !=
+                                          UpdateDataFound.NAME && (
+                                          <option value={row.CATEGORY_NAME}>
+                                            {row.CATEGORY_NAME}
+                                          </option>
+                                        )}
+                                      </>
+                                    ))}
+                                  </>
+                                )}
+                              </select>
                             </div>
                           </div>
 

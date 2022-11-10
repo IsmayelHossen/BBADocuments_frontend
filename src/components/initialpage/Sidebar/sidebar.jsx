@@ -46,9 +46,9 @@ const Sidebar = () => {
                   <li>
                     <Link
                       className={
-                        pathname.includes("/docs/Add/category") ? "active" : ""
+                        pathname.includes("/docs/category/add") ? "active" : ""
                       }
-                      to="/docs/Add/category"
+                      to="/docs/category/add"
                     >
                       Add New Category
                     </Link>
@@ -85,35 +85,6 @@ const Sidebar = () => {
               </li>
 
               {/* add service */}
-              <li className="submenu text-start">
-                <a href="#">
-                  <i className="la la-gift" /> <span> Docuemnts Category</span>{" "}
-                  <span className="menu-arrow" />
-                </a>
-                <ul style={{ display: "none" }}>
-                  <li>
-                    <Link
-                      className={
-                        pathname.includes("/docs/cat/personal") ? "active" : ""
-                      }
-                      to="/docs/cat/personal"
-                    >
-                      BBA
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      className={
-                        pathname.includes("/docs/cat/others") ? "active" : ""
-                      }
-                      to="/docs/cat/others"
-                    >
-                      Others
-                    </Link>
-                  </li>
-                </ul>
-              </li>
             </ul>
           </div>
         </div>
