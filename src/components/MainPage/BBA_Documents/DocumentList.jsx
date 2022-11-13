@@ -15,7 +15,7 @@ import "../../../index.css";
 
 import "../BBA_Documents/vendor.css";
 import { BaseUrl } from "./CommonUrl";
-import { LineWave } from "react-loader-spinner";
+import { ColorRing, LineWave } from "react-loader-spinner";
 
 const DocumentList = () => {
   const [DataLoader, setDataLoader] = useState(true);
@@ -63,55 +63,14 @@ const DocumentList = () => {
   const handleOnchangeforlast_id = async (e) => {
     const filter = e.target.value;
     console.log(filter);
-    if (filter != "") {
-      setFilterSearch(e.target.value);
-      axios
-        .get(`${BaseUrl}/documents/all_documents_filter/${filter}`)
-        .then((response) => {
-          console.log(response.data);
-          // console.log(response.data.data);
-          setdata("");
-          setfileData(response.data.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
+    setFilterSearch(e.target.value);
+    if (filter == "" && searchdata == "") {
       getDocument();
-    }
-  };
-  //get last stage filter data
-  const lastStageFilterDataBack = (filterSearch) => {
-    axios
-      .get(`${BaseUrl}/documents/all_documents_filter/${filterSearch}`)
-      .then((response) => {
-        console.log(response.data);
-        // console.log(response.data.data);
-        setdata("");
-        setfileData(response.data.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const SearchData = (e) => {
-    //first of all  filter check
-    if (FilterSearch == "") {
-      swal("Please Filter data select first", "", "warning");
     } else {
-      const search = e.target.value;
-      setsearchdata(e.target.value);
-      console.log(search);
-      if (FilterSearch == "" && search == "") {
-        getDocument();
-      } else if (search == "") {
-        lastStageFilterDataBack(FilterSearch);
-      } else {
+      if (filter != "") {
+        // setFilterSearch(e.target.value);
         axios
-          .get(
-            `${BaseUrl}/documents/all_documents_search/${search}/${FilterSearch}`
-          )
+          .get(`${BaseUrl}/documents/all_documents_filter/${filter}`)
           .then((response) => {
             console.log(response.data);
             // console.log(response.data.data);
@@ -121,7 +80,70 @@ const DocumentList = () => {
           .catch((error) => {
             console.error(error);
           });
+      } else {
+        getDocument();
       }
+    }
+  };
+  //get last stage filter data
+  const lastStageFilterDataBack = (filterSearch) => {
+    if (filterSearch == "" && searchdata == "") {
+      getDocument();
+    } else {
+      axios
+        .get(`${BaseUrl}/documents/all_documents_filter/${filterSearch}`)
+        .then((response) => {
+          console.log(response.data);
+          // console.log(response.data.data);
+          setdata("");
+          setfileData(response.data.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  const SearchData = (e) => {
+    //first of all  filter check
+    const search = e.target.value;
+    setsearchdata(e.target.value);
+    console.log(search);
+    if (FilterSearch == "" && search == "") {
+      getDocument();
+    } else if (FilterSearch == "" && search != "") {
+      axios
+        .get(
+          `${BaseUrl}/documents/all_documents_search_withoutFilter/${search}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          // console.log(response.data.data);
+          setdata("");
+          setFilterSearch("");
+          setfileData(response.data.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else if (FilterSearch != "" && search != "") {
+      axios
+        .get(
+          `${BaseUrl}/documents/all_documents_search/${search}/${FilterSearch}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          // console.log(response.data.data);
+          setdata("");
+          setfileData(response.data.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else if (FilterSearch != "" && search == "") {
+      lastStageFilterDataBack(FilterSearch);
+    } else {
+      getDocument();
     }
   };
 
@@ -292,19 +314,27 @@ const DocumentList = () => {
               <div className="col-md-12">
                 {DataLoader && (
                   <>
-                    <LineWave
-                      style={{ color: "red" }}
-                      height="200"
-                      width="800"
-                      color="#4fa94d"
-                      ariaLabel="line-wave"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                      visible={true}
-                      firstLineColor="red"
-                      middleLineColor="yellow"
-                      lastLineColor=""
-                    />
+                    <div class="row">
+                      <div class="col-md-5"></div>
+                      <div class="col-md-2 mt-4">
+                        <ColorRing
+                          visible={true}
+                          height="80"
+                          width={100}
+                          ariaLabel="blocks-loading"
+                          wrapperStyle={{}}
+                          wrapperClass="blocks-wrapper"
+                          colors={[
+                            "#e15b64",
+                            "#f47e60",
+                            "#f8b26a",
+                            "#abbd81",
+                            "#849b87",
+                          ]}
+                        />
+                      </div>
+                      <div class="col-md-5"></div>
+                    </div>
                   </>
                 )}
                 {!DataLoader && (

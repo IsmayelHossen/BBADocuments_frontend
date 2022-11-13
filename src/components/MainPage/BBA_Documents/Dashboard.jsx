@@ -3,8 +3,10 @@
  */
 
 import axios from "axios";
+import { data } from "jquery";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { ColorRing } from "react-loader-spinner";
 import { Link } from "react-router-dom";
 
 import "../../../index.css";
@@ -18,6 +20,7 @@ const Dashboard = ({ alldata9 }) => {
   console.log(alldata9);
   const [Alldata, setdata] = useState([]);
   const [fileData, setfileData] = useState([]);
+  const [isLoader, setisLoader] = useState(true);
   useEffect(() => {
     getDataapicall();
     getDocument();
@@ -25,14 +28,24 @@ const Dashboard = ({ alldata9 }) => {
 
   const getDataapicall = () => {
     axios.get(`${BaseUrl}/documents/getdata`).then((res) => {
-      setdata(res.data.data);
+      setfileData(res.data.data);
+      setisLoader(false);
+      console.log(res.data.data);
     });
   };
 
   const getDocument = () => {
-    axios.get(`${BaseUrl}/documents/docslist`).then((res) => {
-      setfileData(res.data.data);
+    axios.get(`${BaseUrl}/documents/categorylist`).then((res) => {
+      setdata(res.data.data);
+      setisLoader(false);
+      console.log(res.data.data);
     });
+  };
+  const CategoryFileCount = (category) => {
+    console.log(category);
+    const count = fileData.filter((data) => data.NAME == category);
+    console.log(count.length);
+    return count.length;
   };
   return (
     <>
@@ -53,74 +66,94 @@ const Dashboard = ({ alldata9 }) => {
             </div>
           </div>
           {/* /Page Header */}
-          <div className="row">
-            <div className=" col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <Link to={`/docs/list`}>
-                    <span className="dash-widget-icon">
-                      <i className="fa fa-cubes" />
-                    </span>
-                    <div className="dash-widget-info">
-                      <h3>{fileData.length}</h3>
-                      <span>Total Files</span>
-                    </div>
-                  </Link>
+          {isLoader && (
+            <>
+              <div class="row">
+                <div class="col-md-5"></div>
+                <div class="col-md-2 mt-4">
+                  <ColorRing
+                    visible={true}
+                    height="80"
+                    width={100}
+                    ariaLabel="blocks-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="blocks-wrapper"
+                    colors={[
+                      "#e15b64",
+                      "#f47e60",
+                      "#f8b26a",
+                      "#abbd81",
+                      "#849b87",
+                    ]}
+                  />
                 </div>
+                <div class="col-md-5"></div>
               </div>
-            </div>
-            <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <span className="dash-widget-icon">
-                    <i className="fa fa-usd" />
-                  </span>
-                  <div className="dash-widget-info">
-                    <h3>44</h3>
-                    <span>Personal</span>
+            </>
+          )}
+          {!isLoader && (
+            <div className="row">
+              <div className=" col-md-6 ">
+                <div className="card dash-widget">
+                  <div className="card-body">
+                    <Link to={`/docs/list`}>
+                      <span className="dash-widget-icon">
+                        <i className="fa fa-cubes" />
+                      </span>
+
+                      <div className="dash-widget-info">
+                        <h3>{fileData.length}</h3>
+                        <span>Total Files</span>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className=" col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <Link to={"/docs/cat"}>
-                    <span className="dash-widget-icon">
-                      <i className="fa fa-diamond" />
-                    </span>
-                    <div className="dash-widget-info">
-                      <h3>37</h3>
-                      <span>BBA</span>
-                    </div>
-                  </Link>
+              <div className=" col-md-6">
+                <div className="card dash-widget">
+                  <div className="card-body">
+                    <Link to={"/docs/add"}>
+                      <span className="dash-widget-icon">
+                        <i className="fa fa-user" />
+                      </span>
+                      <div className="dash-widget-info">
+                        <h3>{Alldata.length}</h3>
+                        <span>Total Archive Category </span>
+                        {Alldata != null &&
+                          Alldata.map((row, index) => (
+                            <>
+                              {/* <ul style={{listStyleType:'none'}}>
+             <li style={{display:"inline-block"}}>{row.name}</li>
+           </ul> */}
+                            </>
+                          ))}
+                      </div>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className=" col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <Link to={"/docs/add"}>
-                    <span className="dash-widget-icon">
-                      <i className="fa fa-user" />
-                    </span>
-                    <div className="dash-widget-info">
-                      <h3>{Alldata.length}</h3>
-                      <span>Total Docuemnts Category </span>
-                      {Alldata != null &&
-                        Alldata.map((row, index) => (
-                          <>
-                            {/* <ul style={{listStyleType:'none'}}>
-                        <li style={{display:"inline-block"}}>{row.name}</li>
-                      </ul> */}
-                          </>
-                        ))}
-                    </div>
-                  </Link>
-                </div>
+              <div className="row">
+                {Alldata != null &&
+                  Alldata.map((row, index) => (
+                    <>
+                      <div className="col-md-4 ">
+                        <div className="card dash-widget">
+                          <div className="card-body">
+                            <span className="dash-widget-icon">
+                              <i className="fa fa-usd" />
+                            </span>
+                            <div className="dash-widget-info">
+                              <h3>{CategoryFileCount(row.CATEGORY_NAME)}</h3>
+                              <span>{row.CATEGORY_NAME}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ))}
               </div>
             </div>
-          </div>
+          )}
         </div>
         {/* /Page Content */}
       </div>

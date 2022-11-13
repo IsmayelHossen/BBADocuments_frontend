@@ -9,7 +9,7 @@ import { Button, Table } from "antd";
 import "../antdstyle.css";
 import { itemRender, onShowSizeChange } from "../paginationfunction";
 import { BaseUrl } from "./CommonUrl";
-import { LineWave } from "react-loader-spinner";
+import { ColorRing, LineWave } from "react-loader-spinner";
 
 const PdfView = () => {
   const useParam = useParams();
@@ -69,19 +69,27 @@ const PdfView = () => {
               <div className="col-md-12">
                 {DataLoader && (
                   <>
-                    <LineWave
-                      style={{ color: "red" }}
-                      height="200"
-                      width="600"
-                      color="#4fa94d"
-                      ariaLabel="line-wave"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                      visible={true}
-                      firstLineColor="red"
-                      middleLineColor="yellow"
-                      lastLineColor=""
-                    />
+                    <div class="row">
+                      <div class="col-md-5"></div>
+                      <div class="col-md-2 mt-4">
+                        <ColorRing
+                          visible={true}
+                          height="80"
+                          width={100}
+                          ariaLabel="blocks-loading"
+                          wrapperStyle={{}}
+                          wrapperClass="blocks-wrapper"
+                          colors={[
+                            "#e15b64",
+                            "#f47e60",
+                            "#f8b26a",
+                            "#abbd81",
+                            "#849b87",
+                          ]}
+                        />
+                      </div>
+                      <div class="col-md-5"></div>
+                    </div>
                   </>
                 )}
                 {!DataLoader && (

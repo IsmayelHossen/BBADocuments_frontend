@@ -1,10 +1,9 @@
 import axios from "axios";
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useParams } from "react-router-dom";
-
 import swal from "sweetalert";
 
 import { Table } from "antd";
@@ -12,7 +11,7 @@ import "../antdstyle.css";
 import { itemRender, onShowSizeChange } from "../paginationfunction";
 import { useForm } from "react-hook-form";
 import { BaseUrl } from "./CommonUrl";
-import { LineWave } from "react-loader-spinner";
+import { ColorRing, LineWave } from "react-loader-spinner";
 // import Dashboard from "../MainPage/Main/Dashboard";
 
 const ViewDocuments = () => {
@@ -145,6 +144,7 @@ const ViewDocuments = () => {
         console.log(error);
       });
   };
+
   return (
     <>
       {console.log("render344")}
@@ -293,19 +293,27 @@ const ViewDocuments = () => {
               <div className="col-md-12">
                 {DataLoader && (
                   <>
-                    <LineWave
-                      style={{ color: "red" }}
-                      height="200"
-                      width="600"
-                      color="#4fa94d"
-                      ariaLabel="line-wave"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                      visible={true}
-                      firstLineColor="red"
-                      middleLineColor="yellow"
-                      lastLineColor=""
-                    />
+                    <div class="row">
+                      <div class="col-md-5"></div>
+                      <div class="col-md-2 mt-4">
+                        <ColorRing
+                          visible={true}
+                          height="80"
+                          width={100}
+                          ariaLabel="blocks-loading"
+                          wrapperStyle={{}}
+                          wrapperClass="blocks-wrapper"
+                          colors={[
+                            "#e15b64",
+                            "#f47e60",
+                            "#f8b26a",
+                            "#abbd81",
+                            "#849b87",
+                          ]}
+                        />
+                      </div>
+                      <div class="col-md-5"></div>
+                    </div>
                   </>
                 )}
                 {!DataLoader && (
@@ -315,7 +323,6 @@ const ViewDocuments = () => {
                         <tr>
                           <th>SN</th>
                           <th>Entry Date</th>
-
                           <th>File Name</th>
                           <th>Download</th>
                           <th>Action</th>
@@ -327,6 +334,7 @@ const ViewDocuments = () => {
                             <td>{index + 1}</td>
                             <td>{row.DATENTIME}</td>
                             <td>{row.FILENAME}</td>
+
                             <td>
                               <Link
                                 to={`/docs/pdfview/${row.FILENAME}/${row.ID}`}
@@ -360,6 +368,10 @@ const ViewDocuments = () => {
                   </div>
                 )}
               </div>
+              {/* ebook trial verson start */}
+              <div></div>
+
+              {/* ebook trial verson end */}
             </div>
           </div>
         </div>
