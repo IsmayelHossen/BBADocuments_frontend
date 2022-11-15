@@ -26,6 +26,7 @@ const PdfView = () => {
       setDataLoader(false);
     }, 2000);
   }, [useParam.name]);
+  //ghj
   return (
     <>
       <Helmet>
@@ -43,7 +44,7 @@ const PdfView = () => {
                 {useParam.name}
               </h4>
             </div>
-            {/* header */}
+            {/* header  fgd*/}
             <div className="d-flex justify-content-between align-items-center Page_header_title_search">
               <div></div>
 

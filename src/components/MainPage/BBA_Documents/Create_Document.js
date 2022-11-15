@@ -202,7 +202,7 @@ const Create_Document = () => {
 
     // console.log(UpdateDataFound);
   };
-
+  //fghf
   //data delete
   const DeleteIndividual_vendor = (id) => {
     setvendorDeleteId(id);
