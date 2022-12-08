@@ -98,13 +98,14 @@ const PdfView = () => {
                   onClick={PdfZoomIn}
                   download
                 >
-                  Download
+                 <i class="fa fa-download" aria-hidden="true"></i>
+
                 </a>
                 <button class="btn btn-success btn-sm" onClick={PdfZoomIn}>
-                  Zoom In
+                  Zoom <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
                 <button class="btn btn-danger btn-sm ml-2" onClick={PdfZoomOut}>
-                  Zoom Out
+                  Zoom <i class="fa fa-minus" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
