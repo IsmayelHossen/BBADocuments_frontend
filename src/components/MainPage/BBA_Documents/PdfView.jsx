@@ -4,10 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { ColorRing } from "react-loader-spinner";
 import "../BBA_Documents/pdf.css";
+import { BaseUrl } from "./CommonUrl";
 const PdfView = () => {
   const useParam = useParams();
   let navigate = useNavigate();
   const [DataLoader, setDataLoader] = useState(true);
+  const [pdfzoom, setpdfzoom] = useState(1);
   const PreviousPage = async () => {
     console.log(useParam.recordId);
     navigate(`/ViewDocuments/${useParam.recordId}`);
@@ -23,10 +25,23 @@ const PdfView = () => {
   const [page, setPage] = useState(1);
   const canvasRef = useRef(null);
 
+  const PdfZoomIn = () => {
+    if (pdfzoom <= 2) {
+      setpdfzoom((previous) => previous + 0.1);
+    }
+  };
+  const PdfZoomOut = () => {
+    if (pdfzoom >= 0.8) {
+      setpdfzoom((previous) => previous - 0.1);
+    }
+  };
+
   const { pdfDocument, pdfPage } = usePdf({
+    // file: `${BaseUrl}/uploadDoc/${useParam.name}`,
     file: "http://localhost:3000/72.pdf",
     page,
     canvasRef,
+    scale: pdfzoom,
   });
 
   return (
@@ -68,6 +83,31 @@ const PdfView = () => {
           {/* Page Content */}
 
           <div class="card-body1" style={{ padding: "6px 8px" }}>
+            <div class="d-flex justify-content-between">
+              <div>
+                <p class="text-center pt-2 pl-4">
+                  {" "}
+                  Page {page} of {pdfDocument?.numPages}
+                </p>
+              </div>
+              <div>
+                <a
+                  href={`${BaseUrl}/uploadDoc/${useParam.name}`}
+                  // href="http://localhost:3000/72.pdf"
+                  class="btn btn-primary btn-sm mr-2"
+                  onClick={PdfZoomIn}
+                  download
+                >
+                  Download
+                </a>
+                <button class="btn btn-success btn-sm" onClick={PdfZoomIn}>
+                  Zoom In
+                </button>
+                <button class="btn btn-danger btn-sm ml-2" onClick={PdfZoomOut}>
+                  Zoom Out
+                </button>
+              </div>
+            </div>
             {!DataLoader && (
               <>
                 {/* <iframe
@@ -78,6 +118,22 @@ const PdfView = () => {
                     >
                       {" "}
                     </iframe> */}
+                {Boolean(pdfDocument && pdfDocument.numPages) && (
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="70"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style={{
+                        width: `${(page / pdfDocument?.numPages) * 100}%`,
+                      }}
+                    >
+                      {Math.ceil((page / pdfDocument?.numPages) * 100)}%
+                    </div>
+                  </div>
+                )}
 
                 <div
                   class="ebookMain_div"
@@ -150,10 +206,7 @@ const PdfView = () => {
                       <div class="col-md-5"></div>
                     </div>
                   )}
-                  <p class="text-center pt-2">
-                    {" "}
-                    Page {page} of {pdfDocument?.numPages}
-                  </p>
+
                   <canvas ref={canvasRef} class="canvasclass" />
                 </div>
               </>
