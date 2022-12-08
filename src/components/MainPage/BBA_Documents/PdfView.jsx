@@ -5,11 +5,16 @@ import { Helmet } from "react-helmet";
 import { ColorRing } from "react-loader-spinner";
 import "../BBA_Documents/pdf.css";
 import { BaseUrl } from "./CommonUrl";
+import { useEffect } from "react";
 const PdfView = () => {
   const useParam = useParams();
   let navigate = useNavigate();
   const [DataLoader, setDataLoader] = useState(true);
-  const [pdfzoom, setpdfzoom] = useState(1);
+  const [windowpdfzoom, setwindowpdfzoom] = useState(1.5);
+  const [mobilepdfzoom, setmobilepdfzoom] = useState(1);
+
+  const [width, setwidth] = useState(1200);
+  const [height, setheight] = useState(600);
   const PreviousPage = async () => {
     console.log(useParam.recordId);
     navigate(`/ViewDocuments/${useParam.recordId}`);
@@ -26,13 +31,25 @@ const PdfView = () => {
   const canvasRef = useRef(null);
 
   const PdfZoomIn = () => {
-    if (pdfzoom <= 2) {
-      setpdfzoom((previous) => previous + 0.1);
+    if (width > 700) {
+      if (windowpdfzoom <= 4) {
+        setwindowpdfzoom((previous) => previous + 0.1);
+      }
+    } else {
+      if (mobilepdfzoom <= 4) {
+        setmobilepdfzoom((previous) => previous + 0.1);
+      }
     }
   };
   const PdfZoomOut = () => {
-    if (pdfzoom >= 0.8) {
-      setpdfzoom((previous) => previous - 0.1);
+    if (width > 700) {
+      if (windowpdfzoom >= 1) {
+        setwindowpdfzoom((previous) => previous - 0.1);
+      }
+    } else {
+      if (mobilepdfzoom >= 1) {
+        setmobilepdfzoom((previous) => previous - 0.1);
+      }
     }
   };
 
@@ -41,9 +58,16 @@ const PdfView = () => {
     file: "http://localhost:3000/72.pdf",
     page,
     canvasRef,
-    scale: pdfzoom,
+    scale: width > 700 ? windowpdfzoom : mobilepdfzoom,
   });
+  useEffect(() => {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    setwidth(w);
+    setheight(h);
 
+    console.log("width", width, "height", height);
+  }, [width, height]);
   return (
     <>
       <Helmet>
@@ -52,7 +76,7 @@ const PdfView = () => {
       {/* Header */}
       <div className="page-wrapper">
         <div className="content container-fluid">
-          <div class="card-header1">
+          <div class="card-header1" style={{ padding: ".4em 0.8em" }}>
             <div className="">
               <h4
                 className="text-center mx-auto mb-3 text-uppercase fddd"
@@ -98,8 +122,7 @@ const PdfView = () => {
                   onClick={PdfZoomIn}
                   download
                 >
-                 <i class="fa fa-download" aria-hidden="true"></i>
-
+                  <i class="fa fa-download" aria-hidden="true"></i>
                 </a>
                 <button class="btn btn-success btn-sm" onClick={PdfZoomIn}>
                   Zoom <i class="fa fa-plus" aria-hidden="true"></i>
@@ -136,22 +159,8 @@ const PdfView = () => {
                   </div>
                 )}
 
-                <div
-                  class="ebookMain_div"
-                  style={{
-                    height: "100%",
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    style={{
-                      left: 0,
-                      position: "absolute",
-                      top: "50%",
-                      transform: "translate(24px, -50%)",
-                      zIndex: 1,
-                    }}
-                  >
+                <div class="ebookMain_div">
+                  <div class="previous_page">
                     {/* Button to go to the previous page */}
                     {Boolean(pdfDocument && pdfDocument.numPages) && (
                       <button
@@ -163,15 +172,7 @@ const PdfView = () => {
                       </button>
                     )}
                   </div>
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top: "50%",
-                      transform: "translate(-24px, -50%)",
-                      zIndex: 1,
-                    }}
-                  >
+                  <div class="next_page">
                     {/* Button to go to the next page */}
                     {Boolean(pdfDocument && pdfDocument.numPages) && (
                       <button
