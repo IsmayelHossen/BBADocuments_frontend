@@ -10,6 +10,8 @@ import ViewDocuments from "./components/MainPage/BBA_Documents/ViewDocuments";
 import DocumentList from "./components/MainPage/BBA_Documents/DocumentList";
 import PdfView from "./components/MainPage/BBA_Documents/PdfView";
 import Docs_Category from "./components/MainPage/BBA_Documents/Docs_Category";
+import Test from "./components/MainPage/BBA_Documents/Test";
+import Pdfjs from "./components/MainPage/BBA_Documents/Pdfjs";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           />
           <Route path="/docs/pdfview/:name/:recordId" element={<PdfView />} />
           <Route path="/docs/list" element={<DocumentList />} />
+          <Route path="/docs/test" element={<Test />} />
+          <Route path="/docs/ab" element={<Pdfjs />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,35 +1,13 @@
-import axios from "axios";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useRef } from "react";
+import { usePdf } from "@mikecousins/react-pdf";
+import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-
-import { Button, Table } from "antd";
-import "../antdstyle.css";
-import { itemRender, onShowSizeChange } from "../paginationfunction";
-import { BaseUrl } from "./CommonUrl";
-import { ColorRing, LineWave } from "react-loader-spinner";
-//react pdf viwer
-import {
-  Icon,
-  MinimalButton,
-  Position,
-  SpecialZoomLevel,
-  Tooltip,
-  Viewer,
-  Worker,
-} from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-// react pdf viwer end
+import { ColorRing } from "react-loader-spinner";
+import "../BBA_Documents/pdf.css";
 const PdfView = () => {
   const useParam = useParams();
   let navigate = useNavigate();
   const [DataLoader, setDataLoader] = useState(true);
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const PreviousPage = async () => {
     console.log(useParam.recordId);
     navigate(`/ViewDocuments/${useParam.recordId}`);
@@ -39,9 +17,18 @@ const PdfView = () => {
     document.title = "DOCUMENTS VIEW";
     setTimeout(() => {
       setDataLoader(false);
-    }, 2000);
+    });
   }, [useParam.name]);
-  //ghj
+
+  const [page, setPage] = useState(1);
+  const canvasRef = useRef(null);
+
+  const { pdfDocument, pdfPage } = usePdf({
+    file: "http://localhost:3000/72.pdf",
+    page,
+    canvasRef,
+  });
+
   return (
     <>
       <Helmet>
@@ -81,31 +68,6 @@ const PdfView = () => {
           {/* Page Content */}
 
           <div class="card-body1" style={{ padding: "6px 8px" }}>
-            {DataLoader && (
-              <>
-                <div class="row">
-                  <div class="col-md-5"></div>
-                  <div class="col-md-2 mt-4">
-                    <ColorRing
-                      visible={true}
-                      height="80"
-                      width={100}
-                      ariaLabel="blocks-loading"
-                      wrapperStyle={{}}
-                      wrapperClass="blocks-wrapper"
-                      colors={[
-                        "#e15b64",
-                        "#f47e60",
-                        "#f8b26a",
-                        "#abbd81",
-                        "#849b87",
-                      ]}
-                    />
-                  </div>
-                  <div class="col-md-5"></div>
-                </div>
-              </>
-            )}
             {!DataLoader && (
               <>
                 {/* <iframe
@@ -118,18 +80,81 @@ const PdfView = () => {
                     </iframe> */}
 
                 <div
+                  class="ebookMain_div"
                   style={{
-                    height: "750px",
-                    border: "2px solid rgb(244, 244, 244)",
+                    height: "100%",
+                    position: "relative",
                   }}
                 >
-                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.1.81/build/pdf.worker.min.js">
-                    <Viewer
-                      fileUrl={`http://localhost:3000/59.pdf`}
-                      plugins={[defaultLayoutPluginInstance]}
-                      defaultScale={SpecialZoomLevel.PageFit}
-                    />
-                  </Worker>
+                  <div
+                    style={{
+                      left: 0,
+                      position: "absolute",
+                      top: "50%",
+                      transform: "translate(24px, -50%)",
+                      zIndex: 1,
+                    }}
+                  >
+                    {/* Button to go to the previous page */}
+                    {Boolean(pdfDocument && pdfDocument.numPages) && (
+                      <button
+                        disabled={page === 1}
+                        onClick={() => setPage(page - 1)}
+                        class="btn  btn-success btn-sm opacity-100"
+                      >
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                      </button>
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      top: "50%",
+                      transform: "translate(-24px, -50%)",
+                      zIndex: 1,
+                    }}
+                  >
+                    {/* Button to go to the next page */}
+                    {Boolean(pdfDocument && pdfDocument.numPages) && (
+                      <button
+                        disabled={page === pdfDocument.numPages}
+                        onClick={() => setPage(page + 1)}
+                        class="btn  btn-success btn-sm "
+                      >
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                      </button>
+                    )}
+                  </div>
+                  {/* Main viewer */}
+                  {!pdfDocument && (
+                    <div class="row">
+                      <div class="col-md-5"></div>
+                      <div class="col-md-2 mt-4">
+                        <ColorRing
+                          visible={true}
+                          height="80"
+                          width={100}
+                          ariaLabel="blocks-loading"
+                          wrapperStyle={{}}
+                          wrapperClass="blocks-wrapper"
+                          colors={[
+                            "#e15b64",
+                            "#f47e60",
+                            "#f8b26a",
+                            "#abbd81",
+                            "#849b87",
+                          ]}
+                        />
+                      </div>
+                      <div class="col-md-5"></div>
+                    </div>
+                  )}
+                  <p class="text-center pt-2">
+                    {" "}
+                    Page {page} of {pdfDocument?.numPages}
+                  </p>
+                  <canvas ref={canvasRef} class="canvasclass" />
                 </div>
               </>
             )}

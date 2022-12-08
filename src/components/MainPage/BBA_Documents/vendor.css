@@ -343,7 +343,18 @@ body {
   }
  
 }
-
+.rpv-default-layout__toolbar {
+	align-items: center;
+	background-color: #910b0b important!;
+	border-bottom: 1px solid var(--rpv-default-layout__toolbar-border-bottom-color);
+	display: flex;
+	left: 0;
+	position: absolute;
+	top: 0;
+	height: 2.5rem;
+	width: 100%;
+	z-index: 1;
+}
 /* @media print {
   #hddd {
     color: red;

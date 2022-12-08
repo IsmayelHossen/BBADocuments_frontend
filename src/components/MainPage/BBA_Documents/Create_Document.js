@@ -289,6 +289,7 @@ const Create_Document = () => {
 
       render: (text, record) => (
         <>
+        
           <Link
             className="btn btn-success btn-sm"
             to={`/docs/viewDocuments/${record.ID}/${record.MEETING_ID}`}

@@ -1,0 +1,55 @@
+
+  .react-pdf__Page__canvas{
+  
+    max-width: 700px;
+    margin: 0 auto;
+   
+    overflow: scroll;
+  
+  
+  }
+  .ebookMain_div {
+    width:1000px;
+    max-width:100%;
+    margin: 0 auto;
+    display: block;
+    border: 2px solid #e8e5e1;
+    box-shadow: 0px 2px 3px #595c60;
+    margin-top: 2em;
+    padding-top: 1px;
+    /* padding-left: 125px; */
+    padding-bottom: 20px;
+  }
+  .canvasclass{
+   width: fit-content !important;
+    max-width: 100%;
+  height:auto;
+  margin: 0 auto;
+  display: block
+  }
+  @media only screen and (max-width: 600px) {
+    .react-pdf__Page__canvas{
+  
+      max-width:fit-content;
+      margin: 0 auto;
+     
+      overflow: scroll;
+    
+    
+    }
+
+    .ebookMain_div {
+      width:fit-content;
+      max-width:100%;
+   
+      
+    }
+    .canvasclass{
+   
+      max-width: 100%;
+    height:auto;
+   
+    }
+  }
+
+  
