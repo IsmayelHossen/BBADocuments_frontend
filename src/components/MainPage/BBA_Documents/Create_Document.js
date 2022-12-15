@@ -44,6 +44,11 @@ const Create_Document = () => {
   const [nextDocId, setnextDocId] = useState("");
   const [categoryData, setcategoryData] = useState("");
   const [lastIdLoadder, setlastIdLoadder] = useState(false);
+  const [HeadingTag, setHeadingTag] = useState([]);
+  const [finalSubmit, setfinalSubmit] = useState(false);
+  const [document_tag, setdocument_tag] = useState("");
+  const [DocumentTagWrite, setDocumentTagWrite] = useState("");
+
   useEffect(() => {
     document.title = "DOCUMENTS ADD FORM";
 
@@ -92,9 +97,32 @@ const Create_Document = () => {
         setlastIdLoadder(true);
       });
   };
+  //tag add
+  const SubmitTagAdd = (e) => {
+    e.preventDefault();
+    const document_tag1 = {
+      name: document_tag,
+    };
+    setHeadingTag([...HeadingTag, document_tag1]);
+
+    console.log(HeadingTag);
+    console.log(document_tag);
+    setdocument_tag("");
+  };
+  const DemoDataDelete = (index) => {
+    // alert(index);
+    const arrarydata = HeadingTag;
+    arrarydata.indexOf(index);
+
+    arrarydata.splice(index, 1);
+
+    setHeadingTag([...arrarydata]);
+  };
 
   // submit for store documents
-
+  useEffect(() => {
+    console.log(HeadingTag);
+  }, [document_tag]);
   const onSubmit = (data) => {
     setprogressShow(true);
     var datentime = new Date().toLocaleString();
@@ -123,6 +151,7 @@ const Create_Document = () => {
     formData.append("name", documentType);
     formData.append("employee_id", employee_id);
     formData.append("meeting_date", rearrange_meeting_date);
+
     console.log(data);
     if (data.documents.length > 1) {
       for (let i = 0; i < data.documents.length; i++) {
@@ -130,6 +159,13 @@ const Create_Document = () => {
       }
     } else {
       formData.append("documents", data.documents[0]);
+    }
+    if (HeadingTag.length > 0) {
+      for (let i = 0; i < HeadingTag.length; i++) {
+        formData.append("document_tag", HeadingTag[i].name);
+      }
+    } else {
+      formData.append("document_tag", HeadingTag);
     }
     axios
       .post(`${BaseUrl}/documents/process_post`, formData, {
@@ -144,9 +180,17 @@ const Create_Document = () => {
           console.log(response.data.data);
           window.$("#exampleModal").modal("hide");
           getDataapicall();
-          reset();
+          reset({
+            document_type: "",
+            doc_id: "",
+            meeting_date: "",
+            documents: "",
+          });
           setnextDocId("");
           setdocumentType("");
+          setHeadingTag([]);
+
+          setprogressShow(false);
         }
       })
       .catch((error) => {
@@ -236,7 +280,7 @@ const Create_Document = () => {
     console.log(e.target.value);
     //e.preventDefault();
     setsearchdata(e.target.value);
-    const search = e.target.value;
+    const search = e.target.value.replace(/[^\w]/gi, "");
     if (search == "") {
       getDataapicall();
     } else {
@@ -257,14 +301,6 @@ const Create_Document = () => {
 
   //table
   const columns = [
-    // {
-    //   title: "Entry By",
-    //   dataIndex: "NAME_1",
-    // },
-    // {
-    //   title: "Designation",
-    //   dataIndex: "DES_NAME",
-    // },
     {
       title: "Documents Type",
       dataIndex: "NAME",
@@ -289,7 +325,6 @@ const Create_Document = () => {
 
       render: (text, record) => (
         <>
-        
           <Link
             className="btn btn-success btn-sm"
             to={`/docs/viewDocuments/${record.ID}/${record.MEETING_ID}`}
@@ -321,7 +356,6 @@ const Create_Document = () => {
             &nbsp; &nbsp; &nbsp;
             <a
               className="btn btn-danger btn-sm"
-              href="#"
               onClick={() => {
                 DeleteIndividual_vendor(record.ID);
               }}
@@ -539,7 +573,7 @@ const Create_Document = () => {
                                 <input
                                   type="file"
                                   id="customFile"
-                                  class=" bba_documents-form-control"
+                                  class="form-control bba_documents-form-control"
                                   {...register("documents", {
                                     required: true,
                                   })}
@@ -561,21 +595,134 @@ const Create_Document = () => {
                               )}
                             </div>
 
-                            <div className="SubmitFooter">
-                              <button
-                                type="submitupdate"
-                                class="Button_success"
+                            <div className="mb-2 row">
+                              <label
+                                for="inputtext"
+                                class="col-sm-4 col-form-label"
                               >
-                                <span>Add</span>
-                              </button>
-                              <button
-                                type="button"
-                                class="Button_Danger1"
-                                data-dismiss="modal"
-                              >
-                                <span> Close</span>
-                              </button>
+                                {" "}
+                                <span style={{ color: "red" }}>*</span>Document
+                                Tag Add Or Next Step
+                              </label>
+                              <div className="col-sm-8">
+                                <select
+                                  class="form-select form-control bba_documents-form-control"
+                                  onChange={(e) =>
+                                    setDocumentTagWrite(e.target.value)
+                                  }
+                                >
+                                  <option value="">Select Type</option>
+                                  <option value="tagAdd">
+                                    Document Tag Add
+                                  </option>
+                                  <option value="nextstep">Next Step</option>
+                                </select>
+                              </div>
                             </div>
+
+                            {DocumentTagWrite == "tagAdd" && (
+                              <>
+                                <div className="mb-2 row">
+                                  <label
+                                    for="inputtext"
+                                    class="col-sm-4 col-form-label"
+                                  >
+                                    {" "}
+                                    Document Heading,Tag,Keyword
+                                  </label>
+                                  <div className="col-sm-8">
+                                    <input
+                                      class="form-control bba_documents-form-control"
+                                      id="validationDefault03"
+                                      placeholder="Tag,Heading"
+                                      name="document_tag"
+                                      value={document_tag}
+                                      onChange={(e) =>
+                                        setdocument_tag(e.target.value)
+                                      }
+                                    ></input>
+                                  </div>
+                                </div>
+                                <div>
+                                  <button
+                                    class="btn btn-primary btn-sm"
+                                    onClick={SubmitTagAdd}
+                                  >
+                                    Tag Add
+                                  </button>
+                                </div>
+
+                                <div class="previewTag ">
+                                  {HeadingTag.length > 0 && (
+                                    <>
+                                      <table class="table table-striped mt-2">
+                                        <thead>
+                                          <tr>
+                                            <th>SI</th>
+                                            <th>Tag Name</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {HeadingTag.map((row, index) => (
+                                            <>
+                                              <tr>
+                                                <td>
+                                                  <button class="btn btn-danger btn-sm">
+                                                    {" "}
+                                                    <i
+                                                      class="fa fa-times"
+                                                      aria-hidden="true"
+                                                      onClick={() =>
+                                                        DemoDataDelete(index)
+                                                      }
+                                                    ></i>
+                                                  </button>
+                                                </td>
+                                                <td> {row.name}</td>
+                                              </tr>
+                                            </>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </>
+                                  )}
+                                </div>
+                                <div className="SubmitFooter">
+                                  <button
+                                    type="submitupdate"
+                                    class="btn btn-success btn-sm mr-2"
+                                  >
+                                    <span>Final Add</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="btn btn-danger btn-sm"
+                                    data-dismiss="modal"
+                                  >
+                                    <span> Close</span>
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                            {DocumentTagWrite == "nextstep" && (
+                              <>
+                                <div className="SubmitFooter">
+                                  <button
+                                    type="submitupdate"
+                                    class="btn btn-success btn-sm mr-2"
+                                  >
+                                    <span>Final Add</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="btn btn-danger btn-sm"
+                                    data-dismiss="modal"
+                                  >
+                                    <span> Close</span>
+                                  </button>
+                                </div>
+                              </>
+                            )}
                           </form>
                         </div>
                       </div>

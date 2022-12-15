@@ -161,9 +161,9 @@ body {
   max-width: 1120px;
 }
 .SubmitFooter {
-  display: flex;
-  max-width: 130px;
-  margin: 0 auto;
+	display: flex;
+	max-width: 214px;
+	margin: 0 auto;
 }
 .SubmitFooter .custombtn {
   margin-right: 16px;
@@ -354,6 +354,12 @@ body {
 	height: 2.5rem;
 	width: 100%;
 	z-index: 1;
+}
+.previewTag{
+  list-style-type: none;
+}
+.previewTag li{
+  padding-top: 3px;
 }
 /* @media print {
   #hddd {

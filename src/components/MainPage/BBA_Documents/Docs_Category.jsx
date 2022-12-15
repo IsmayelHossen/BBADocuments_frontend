@@ -152,7 +152,7 @@ const Docs_Category = () => {
     console.log(e.target.value);
     //e.preventDefault();
     setsearchdata(e.target.value);
-    const search = e.target.value;
+    const search = e.target.value.replace(/[^\w]/gi, "");
     if (search == "") {
       getDataapicall();
     } else {

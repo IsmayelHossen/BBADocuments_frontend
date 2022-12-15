@@ -324,45 +324,61 @@ const ViewDocuments = () => {
                           <th>SN</th>
                           <th>Entry Date</th>
                           <th>File Name</th>
+                          <th>Ebook</th>
                           <th>Download</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {fileData.map((row, index) => (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{row.DATENTIME}</td>
-                            <td>{row.FILENAME}</td>
+                        {fileData.length > 0 &&
+                          fileData.map((row, index) => (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{row.DATENTIME}</td>
+                              <td>{row.FILENAME}</td>
 
-                            <td>
-                              <Link
-                                to={`/docs/pdfview/${row.FILENAME}/${row.ID}`}
-                              >
-                                <span class="fa fa-download"></span>({" "}
-                                {row.F_SIZE / 1024 > 1023
-                                  ? (row.F_SIZE / 1024 / 1024).toPrecision(3) +
-                                    " mb"
-                                  : Math.ceil(row.F_SIZE / 1024) + " kb"}
-                                )
-                              </Link>
-                            </td>
-                            <td className="">
-                              <a
-                                className="dropdown-item"
-                                href="#"
-                                onClick={() => {
-                                  DeleteIndividual_vendor(row.ID, row.FILENAME);
-                                }}
-                              >
-                                <i
-                                  className="fa fa-trash-o m-r-5"
-                                  style={{ fontSize: "20px", color: "red" }}
-                                />
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
+                              <td>
+                                <Link
+                                  to={`/docs/pdfview/${row.FILENAME}/${row.ID}`}
+                                >
+                                  <i class="fa fa-book h3"></i>
+                                </Link>
+                              </td>
+                              <td>
+                                <a
+                                  href={`${BaseUrl}/uploadDoc/${row.FILENAME}`}
+                                  // href="http://localhost:3000/72.pdf"
+                                  class="btn btn-primary btn-sm mr-2"
+                                  download
+                                >
+                                  <span class="fa fa-download"></span>({" "}
+                                  {row.F_SIZE / 1024 > 1023
+                                    ? (row.F_SIZE / 1024 / 1024).toPrecision(
+                                        3
+                                      ) + " mb"
+                                    : Math.ceil(row.F_SIZE / 1024) + " kb"}
+                                  )
+                                </a>
+                              </td>
+                              <td className="">
+                                <a
+                                  className="dropdown-item"
+                                  href="#"
+                                  onClick={() => {
+                                    DeleteIndividual_vendor(
+                                      row.ID,
+                                      row.FILENAME
+                                    );
+                                  }}
+                                >
+                                  <i
+                                    className="fa fa-trash-o m-r-5"
+                                    style={{ fontSize: "20px", color: "red" }}
+                                  />
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>

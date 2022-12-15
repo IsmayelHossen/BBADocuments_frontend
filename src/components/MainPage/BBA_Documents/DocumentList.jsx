@@ -106,7 +106,7 @@ const DocumentList = () => {
   //fgh
   const SearchData = (e) => {
     //first of all  filter check
-    const search = e.target.value;
+    const search = e.target.value.replace(/[^\w]/gi, "");
     setsearchdata(e.target.value);
     console.log(search);
     if (FilterSearch == "" && search == "") {
@@ -219,16 +219,31 @@ const DocumentList = () => {
       dataIndex: "FILENAME",
     },
     {
-      title: "Download",
+      title: "Ebook",
       render: (text, rowKey) => (
         <>
           <Link to={`/docs/pdfView/${rowKey.FILENAME}/${rowKey.ID}`}>
+            <i class="fa fa-book h3"></i>
+          </Link>
+        </>
+      ),
+    },
+    {
+      title: "Download",
+      render: (text, rowKey) => (
+        <>
+          <a
+            href={`${BaseUrl}/uploadDoc/${rowKey.FILENAME}`}
+            // href="http://localhost:3000/72.pdf"
+            class="btn btn-primary btn-sm mr-2"
+            download
+          >
             <span class="fa fa-download"></span>({" "}
             {rowKey.F_SIZE / 1024 > 1023
               ? (rowKey.F_SIZE / 1024 / 1024).toPrecision(3) + " mb"
               : Math.ceil(rowKey.F_SIZE / 1024) + " kb"}
             )
-          </Link>
+          </a>
         </>
       ),
     },
