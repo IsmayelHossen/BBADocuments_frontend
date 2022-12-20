@@ -108,7 +108,6 @@ const DocumentList = () => {
     //first of all  filter check
     const search = e.target.value.replace(/[^\w]/gi, "");
     setsearchdata(e.target.value);
-    console.log(search);
     if (FilterSearch == "" && search == "") {
       getDocument();
     } else if (FilterSearch == "" && search != "") {

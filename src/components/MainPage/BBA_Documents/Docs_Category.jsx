@@ -194,7 +194,6 @@ const Docs_Category = () => {
           <div className="">
             <a
               className="btn btn-primary btn-sm"
-              href="#"
               data-toggle="modal"
               data-target="#vendor_update"
               onClick={() => {
@@ -209,7 +208,6 @@ const Docs_Category = () => {
             &nbsp; &nbsp; &nbsp;
             <a
               className="btn btn-danger btn-sm"
-              href="#"
               onClick={() => {
                 DeleteCategory(record.ID);
               }}
